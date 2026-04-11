@@ -84,6 +84,14 @@ function updateUI() {
         renderRebirth()
 }
 
+function safeSetTextContent(id, text) {
+    const element = document.getElementById(id)
+    if (element) {
+        element.textContent = text
+    }
+    return element
+}
+
 function renderSideBar() {
     const task = gameData.currentJob
     const quickTaskDisplayElement = document.getElementById("quickTaskDisplay")
