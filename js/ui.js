@@ -904,7 +904,21 @@ function renderHeaderRows(categories) {
         const headerRow = document.getElementsByClassName(className)[0]
         const maxLevelElement = headerRow.querySelector(".maxLevel")
         gameData.rebirthOneCount > 0 ? maxLevelElement.classList.remove("hidden") : maxLevelElement.classList.add("hidden")
+
+        const visible = isCategoryVisible(categoryName, categories)
+        Array.from(document.getElementsByClassName(className)).forEach(element => {
+            element.classList.toggle("hidden", !visible)
+        })
     }
+}
+
+function isCategoryVisible(categoryName, categories) {
+    if (categories == jobCategories && categoryName == "Mythical Alignments") {
+        const firstTask = categories[categoryName][0]
+        const requirement = gameData.requirements[firstTask]
+        return requirement && requirement.isCompletedActual()
+    }
+    return true
 }
 
 function createRequiredRow(categoryName) {
@@ -944,6 +958,7 @@ function createRow(templates, name, categoryName, categoryType) {
     row.getElementsByClassName("name")[0].textContent = name
     row.getElementsByClassName("tooltipText")[0].textContent = tooltips[name]
     row.id = "row" + removeSpaces(removeStrangeCharacters(name))
+    row.classList.add(removeSpaces(categoryName))
 
     if (categoryType == itemCategories) {
         row.getElementsByClassName("button")[0].onclick = categoryName == "Properties" ? () => { setCurrentProperty(name) } : () => { setMisc(name) }
