@@ -132,6 +132,13 @@
     boost_cooldown: 0.0,
     boost_timer: 0.0,
     boost_active: false,
+    combat: {
+        enemyForces: 0,
+        lostInCombat: 0,
+        spawnTimer: 0,
+        battlesWon: 0,
+        battleScale: 1,
+    },
 }
 
 var tempData = {}

@@ -52,6 +52,110 @@ var honorReward = 0;
 var probeCount = 10000;
 var probesLostCombat = 0;
 
+function getCombatSkillEffect(taskName) {
+    const task = gameData.taskData[taskName]
+    return task && task.unlocked ? task.getEffect() : 1
+}
+
+function getCombatPower() {
+    const strength = getCombatSkillEffect("Strength")
+    const tactics = getCombatSkillEffect("Battle Tactics")
+    const memory = getCombatSkillEffect("Muscle Memory")
+    return 1 + (strength - 1) * 6 + (tactics - 1) * 10 + (memory - 1) * 3
+}
+
+function getEnemyThreat() {
+    return 1 + gameData.combat.battlesWon * 0.15 + gameData.days / 365 * 0.03
+}
+
+function spawnCombatWave() {
+    const threat = getEnemyThreat()
+    const baseForces = 20 + threat * 8
+    gameData.combat.enemyForces += Math.max(1, Math.floor(baseForces + Math.random() * baseForces))
+    gameData.combat.battleScale = Math.max(1, Math.ceil(gameData.combat.enemyForces / 10))
+}
+
+function renderCombatUI() {
+    const scaleElement = document.getElementById("battleScale")
+    const lostDisplay = document.getElementById("probesLostCombatDisplay")
+    const bodyCount = document.getElementById("combatBodyCount")
+
+    if (scaleElement)
+        scaleElement.textContent = gameData.combat.battleScale
+    if (lostDisplay)
+        lostDisplay.textContent = numberCruncher(gameData.combat.lostInCombat, 0)
+    if (bodyCount)
+        bodyCount.innerHTML = "Lost in combat: (<span id=\"probesLostCombatDisplay\">" + numberCruncher(gameData.combat.lostInCombat, 0) + "</span>)<br />Enemy force: " + numberCruncher(gameData.combat.enemyForces, 0)
+
+    drawCombatCanvas()
+}
+
+function drawCombatCanvas() {
+    const canvas = document.getElementById("canvas")
+    if (!canvas)
+        return
+
+    const ctx = canvas.getContext("2d")
+    canvas.width = battleWIDTH
+    canvas.height = battleHEIGHT
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = "#111"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    const combatPower = getCombatPower()
+    const enemyForces = gameData.combat.enemyForces
+    const maxValue = Math.max(combatPower * 10, enemyForces, 1)
+
+    const playerBarWidth = Math.round((combatPower * 10 / maxValue) * (canvas.width - 80))
+    const enemyBarWidth = Math.round((enemyForces / maxValue) * (canvas.width - 80))
+
+    ctx.fillStyle = "#1d7aee"
+    ctx.fillRect(40, 40, playerBarWidth, 28)
+    ctx.fillStyle = "#d32f2f"
+    ctx.fillRect(40, 90, enemyBarWidth, 28)
+
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "16px Arial"
+    ctx.fillText("Player combat strength", 40, 32)
+    ctx.fillText("Enemy force", 40, 82)
+    ctx.fillText(Math.round(combatPower * 10), canvas.width - 40 - String(Math.round(combatPower * 10)).length * 10, 62)
+    ctx.fillText(numberCruncher(enemyForces, 0), canvas.width - 40 - String(numberCruncher(enemyForces, 0)).length * 10, 112)
+}
+
+function updateCombat() {
+    const combatPower = getCombatPower()
+    const hasCombat = combatPower > 1
+
+    if (hasCombat) {
+        gameData.combat.spawnTimer += 1
+        if (gameData.combat.spawnTimer >= 120) {
+            spawnCombatWave()
+            gameData.combat.spawnTimer = 0
+        }
+    }
+
+    if (gameData.combat.enemyForces > 0 && hasCombat) {
+        const damage = combatPower * 0.18
+        const enemyLoss = Math.min(gameData.combat.enemyForces, damage)
+        gameData.combat.enemyForces -= enemyLoss
+
+        const combatLoss = Math.max(0, Math.round(enemyLoss * 0.05))
+        gameData.combat.lostInCombat += combatLoss
+
+        gameData.combat.battleScale = Math.max(1, Math.ceil(gameData.combat.enemyForces / 10))
+
+        if (gameData.combat.enemyForces <= 0) {
+            gameData.combat.enemyForces = 0
+            gameData.combat.battlesWon += 1
+            gameData.coins += Math.floor(5 + combatPower * 3)
+            gameData.combat.battleScale = 1
+        }
+    }
+
+    renderCombatUI()
+}
+
 //NON-CANVAS BATTLE LOGIC
 
 function checkForBattles(){
@@ -783,7 +887,7 @@ function createBattle(){
         battleRIGHTSHIPS=200;
     }
         
-    Battle();
+    // Legacy canvas battle logic is disabled in favor of the new gameData.combat visuals.
     
     battleName = ("Drifter Attack "+newBattle.id);
     
@@ -799,7 +903,5 @@ function createBattle(){
     
     }
 
-var app = new Battle();
-app.initialize();
-    
+// Legacy Battle canvas loop is disabled because combat is now driven by gameData.combat.
 

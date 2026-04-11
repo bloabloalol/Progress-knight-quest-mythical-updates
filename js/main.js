@@ -1281,6 +1281,21 @@ function loadGameData() {
             if (gameData.perks_points == null || isNaN(gameData.perks_points))
                 gameData.perks_points = 0
 
+            if (gameData.combat == null)
+                gameData.combat = { enemyForces: 0, lostInCombat: 0, spawnTimer: 0, battlesWon: 0, battleScale: 1 }
+            else {
+                if (gameData.combat.enemyForces == null || isNaN(gameData.combat.enemyForces))
+                    gameData.combat.enemyForces = 0
+                if (gameData.combat.lostInCombat == null || isNaN(gameData.combat.lostInCombat))
+                    gameData.combat.lostInCombat = 0
+                if (gameData.combat.spawnTimer == null || isNaN(gameData.combat.spawnTimer))
+                    gameData.combat.spawnTimer = 0
+                if (gameData.combat.battlesWon == null || isNaN(gameData.combat.battlesWon))
+                    gameData.combat.battlesWon = 0
+                if (gameData.combat.battleScale == null || isNaN(gameData.combat.battleScale))
+                    gameData.combat.battleScale = 1
+            }
+
             if (gameData.settings.theme == null) {
                 gameData.settings.theme = 1
             }
@@ -1321,6 +1336,8 @@ function update(needUpdateUI = true) {
     autoPromote()
     autoBuy()
     applyExpenses()
+    if (typeof updateCombat === "function")
+        updateCombat()
     for (const key in gameData.taskData) {
         const task = gameData.taskData[key]
         if ((task instanceof Skill || task instanceof Job) && gameData.requirements[key].isCompleted()) {
