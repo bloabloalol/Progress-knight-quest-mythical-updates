@@ -1518,7 +1518,9 @@ function exportGameData() {
 function copyTextToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         const tooltip = document.getElementById("exportTooltip");
-        tooltip.innerHTML = "&nbsp;&nbsp;Save copied to clipboard!" ;
+        if (tooltip) {
+            tooltip.innerHTML = "&nbsp;&nbsp;Save copied to clipboard!" ;
+        }
     }, err => {
         //console.error('Async: Could not copy text: ', err);
     })
@@ -1526,17 +1528,23 @@ function copyTextToClipboard(text) {
 
 function outExportButton() {
     const tooltip = document.getElementById("exportTooltip");
-    tooltip.textContent = "";
+    if (tooltip) {
+        tooltip.textContent = "";
+    }
 }
 
 function onFontButtonHover() {
     const tooltip = document.getElementById("fontSizeTooltip");
-    tooltip.classList.remove("hidden")
+    if (tooltip) {
+        tooltip.classList.remove("hidden")
+    }
 }
 
 function onFontButtonStopHover() {
     const tooltip = document.getElementById("fontSizeTooltip");
-    tooltip.classList.add("hidden")
+    if (tooltip) {
+        tooltip.classList.add("hidden")
+    }
 }
 
 function isNextDarkMagicSkillInReach() {
