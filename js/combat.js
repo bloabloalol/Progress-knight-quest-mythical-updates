@@ -51,27 +51,35 @@ var honorReward = 0;
 
 var probeCount = 10000;
 var probesLostCombat = 0;
+var battleAnimationTick = 0;
 
 function getCombatSkillEffect(taskName) {
     const task = gameData.taskData[taskName]
     return task && task.unlocked ? task.getEffect() : 1
 }
 
+function getCombatSkillScore(taskName) {
+    const effect = getCombatSkillEffect(taskName)
+    return Math.log10(Math.max(effect, 1))
+}
+
 function getCombatPower() {
-    const strength = getCombatSkillEffect("Strength")
-    const tactics = getCombatSkillEffect("Battle Tactics")
-    const memory = getCombatSkillEffect("Muscle Memory")
-    return 1 + (strength - 1) * 6 + (tactics - 1) * 10 + (memory - 1) * 3
+    const strength = getCombatSkillScore("Strength")
+    const tactics = getCombatSkillScore("Battle Tactics")
+    const memory = getCombatSkillScore("Muscle Memory")
+    return Math.max(1, 2 + strength * 4 + tactics * 5 + memory * 2)
 }
 
 function getEnemyThreat() {
-    return 1 + gameData.combat.battlesWon * 0.15 + gameData.days / 365 * 0.03
+    return 1 + gameData.combat.battlesWon * 0.25 + (gameData.days / 365) * 0.08 + Math.log10(getCombatPower() + 1) * 0.14
 }
 
 function spawnCombatWave() {
     const threat = getEnemyThreat()
-    const baseForces = 20 + threat * 8
-    gameData.combat.enemyForces += Math.max(1, Math.floor(baseForces + Math.random() * baseForces))
+    const power = getCombatPower()
+    const baseForces = 16 + threat * 10 + power * 0.7
+    const incoming = Math.max(1, Math.floor(baseForces + Math.random() * (baseForces * 0.5)))
+    gameData.combat.enemyForces += incoming
     gameData.combat.battleScale = Math.max(1, Math.ceil(gameData.combat.enemyForces / 10))
 }
 
@@ -100,27 +108,83 @@ function drawCombatCanvas() {
     canvas.height = battleHEIGHT
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = "#111"
+
+    const background = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+    background.addColorStop(0, "#08121f")
+    background.addColorStop(1, "#101820")
+    ctx.fillStyle = background
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+    for (let x = 0; x < canvas.width; x += 20) {
+        ctx.strokeStyle = "rgba(255,255,255,0.05)"
+        ctx.beginPath()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, canvas.height)
+        ctx.stroke()
+    }
+    for (let y = 0; y < canvas.height; y += 20) {
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(canvas.width, y)
+        ctx.stroke()
+    }
+
     const combatPower = getCombatPower()
-    const enemyForces = gameData.combat.enemyForces
-    const maxValue = Math.max(combatPower * 10, enemyForces, 1)
+    const enemyForces = Math.max(0, gameData.combat.enemyForces)
+    const displayMax = Math.max(combatPower, enemyForces, 1)
 
-    const playerBarWidth = Math.round((combatPower * 10 / maxValue) * (canvas.width - 80))
-    const enemyBarWidth = Math.round((enemyForces / maxValue) * (canvas.width - 80))
+    const playerBarWidth = Math.round((combatPower / displayMax) * (canvas.width - 80))
+    const enemyBarWidth = Math.round((enemyForces / displayMax) * (canvas.width - 80))
 
-    ctx.fillStyle = "#1d7aee"
-    ctx.fillRect(40, 40, playerBarWidth, 28)
-    ctx.fillStyle = "#d32f2f"
-    ctx.fillRect(40, 90, enemyBarWidth, 28)
+    ctx.fillStyle = "rgba(29, 122, 238, 0.85)"
+    ctx.fillRect(40, 40, playerBarWidth, 24)
+    ctx.fillStyle = "rgba(211, 47, 47, 0.85)"
+    ctx.fillRect(40, 90, enemyBarWidth, 24)
+    ctx.strokeStyle = "rgba(255,255,255,0.22)"
+    ctx.strokeRect(40, 40, canvas.width - 80, 24)
+    ctx.strokeRect(40, 90, canvas.width - 80, 24)
 
     ctx.fillStyle = "#ffffff"
-    ctx.font = "16px Arial"
-    ctx.fillText("Player combat strength", 40, 32)
+    ctx.font = "14px Arial"
+    ctx.fillText("Player strength", 40, 32)
     ctx.fillText("Enemy force", 40, 82)
-    ctx.fillText(Math.round(combatPower * 10), canvas.width - 40 - String(Math.round(combatPower * 10)).length * 10, 62)
-    ctx.fillText(numberCruncher(enemyForces, 0), canvas.width - 40 - String(numberCruncher(enemyForces, 0)).length * 10, 112)
+    ctx.fillText(numberCruncher(Math.round(combatPower), 0), canvas.width - 40 - String(Math.round(combatPower)).length * 10, 60)
+    ctx.fillText(numberCruncher(enemyForces, 0), canvas.width - 40 - String(numberCruncher(enemyForces, 0)).length * 10, 110)
+
+    const playerShips = Math.min(18, Math.max(4, Math.round(Math.log10(combatPower + 1) * 3)))
+    const enemyShips = Math.min(18, Math.max(4, Math.round(Math.log10(enemyForces + 1) * 3)))
+    battleAnimationTick += 0.03
+
+    for (let i = 0; i < playerShips; i++) {
+        const phase = battleAnimationTick + i * 0.6
+        const x = 40 + (i / Math.max(1, playerShips - 1)) * (canvas.width / 2 - 60)
+        const y = 130 + Math.sin(phase) * 10
+        const size = 4 + Math.sin(phase * 1.3) * 1.5
+        ctx.fillStyle = "rgba(29, 122, 238, 0.95)"
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + size, y + size / 2)
+        ctx.lineTo(x, y + size)
+        ctx.closePath()
+        ctx.fill()
+    }
+
+    for (let i = 0; i < enemyShips; i++) {
+        const phase = battleAnimationTick + i * 0.6
+        const x = canvas.width - 40 - (i / Math.max(1, enemyShips - 1)) * (canvas.width / 2 - 60)
+        const y = 40 + Math.cos(phase) * 10
+        const size = 4 + Math.cos(phase * 1.4) * 1.5
+        ctx.fillStyle = "rgba(211, 47, 47, 0.95)"
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        ctx.lineTo(x - size, y + size / 2)
+        ctx.lineTo(x, y + size)
+        ctx.closePath()
+        ctx.fill()
+    }
+
+    ctx.fillStyle = "rgba(255,255,255,0.12)"
+    ctx.fillRect(canvas.width / 2 - 2, 0, 4, canvas.height)
 }
 
 function updateCombat() {
@@ -136,11 +200,11 @@ function updateCombat() {
     }
 
     if (gameData.combat.enemyForces > 0 && hasCombat) {
-        const damage = combatPower * 0.18
+        const damage = combatPower * 0.35
         const enemyLoss = Math.min(gameData.combat.enemyForces, damage)
         gameData.combat.enemyForces -= enemyLoss
 
-        const combatLoss = Math.max(0, Math.round(enemyLoss * 0.05))
+        const combatLoss = Math.max(0, Math.round(enemyLoss * 0.06))
         gameData.combat.lostInCombat += combatLoss
 
         gameData.combat.battleScale = Math.max(1, Math.ceil(gameData.combat.enemyForces / 10))
