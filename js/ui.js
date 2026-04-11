@@ -88,17 +88,32 @@ function renderSideBar() {
     const task = gameData.currentJob
     const quickTaskDisplayElement = document.getElementById("quickTaskDisplay")
 
-    const progressBar = quickTaskDisplayElement.getElementsByClassName("job")[0]
-    progressBar.querySelector(".name").textContent = (task.isHero ? "Great " : "") + task.name + " lvl " + formatLevel(task.level)
-    const progressFill = progressBar.getElementsByClassName("progressFill")[0]
-    renderProgressBar(task, progressFill, progressBar)   
+    if (quickTaskDisplayElement) {
+        const progressBar = quickTaskDisplayElement.getElementsByClassName("job")[0]
+        if (progressBar) {
+            const nameElement = progressBar.querySelector(".name")
+            if (nameElement) {
+                nameElement.textContent = (task.isHero ? "Great " : "") + task.name + " lvl " + formatLevel(task.level)
+            }
+            const progressFill = progressBar.getElementsByClassName("progressFill")[0]
+            if (progressFill) {
+                renderProgressBar(task, progressFill, progressBar)
+            }
+        }
+    }
 
-    document.getElementById("ageDisplay").textContent = formatAge(gameData.days)
-    document.getElementById("lifespanDisplay").textContent = formatWhole(daysToYears(getLifespan()))
-    document.getElementById("realtimeDisplay").textContent = formatTime(gameData.realtime)
-    document.getElementById("boostCooldownDisplay").textContent = getBoostCooldownString()            
-    document.getElementById("pauseButton").textContent = gameData.paused ? "Play" : "Pause"
-    document.getElementById("boostPanel").hidden = gameData.rebirthFiveCount == 0
+    safeSetTextContent("ageDisplay", formatAge(gameData.days))
+    safeSetTextContent("lifespanDisplay", formatWhole(daysToYears(getLifespan())))
+    safeSetTextContent("realtimeDisplay", formatTime(gameData.realtime))
+    safeSetTextContent("boostCooldownDisplay", getBoostCooldownString())            
+    const pauseButton = document.getElementById("pauseButton")
+    if (pauseButton) {
+        pauseButton.textContent = gameData.paused ? "Play" : "Pause"
+    }
+    const boostPanel = document.getElementById("boostPanel")
+    if (boostPanel) {
+        boostPanel.hidden = gameData.rebirthFiveCount == 0
+    }
     renderBoostButton("boostButton")
 
     formatCoins(gameData.coins, document.getElementById("coinDisplay"))
@@ -107,7 +122,7 @@ function renderSideBar() {
     formatCoins(getIncome(), document.getElementById("incomeDisplay"))
     formatCoins(getExpense(), document.getElementById("expenseDisplay"))
 
-    document.getElementById("happinessDisplay").textContent = format(getHappiness())
+    safeSetTextContent("happinessDisplay", format(getHappiness()))
 
     safeSetTextContent("evilDisplay", format(gameData.evil))
     safeSetTextContent("evilGainDisplay", format(getEvilGain()))
@@ -118,20 +133,26 @@ function renderSideBar() {
     safeSetTextContent("essenceGainButtonDisplay", "+" + format(getEssenceGain()))
 
     safeSetTextContent("darkMatterDisplay", format(gameData.dark_matter))
-    document.getElementById("darkMatterGainDisplay").textContent = format(getDarkMatterGain())
-    document.getElementById("darkMatterGainButtonDisplay").textContent = "+" + format(getDarkMatterGain())
+    safeSetTextContent("darkMatterGainDisplay", format(getDarkMatterGain()))
+    safeSetTextContent("darkMatterGainButtonDisplay", "+" + format(getDarkMatterGain()))
 
-    document.getElementById("darkOrbsDisplay").textContent = formatTreshold(gameData.dark_orbs)
-    document.getElementById("darkCubesInfo").hidden = !gameData.requirements["The Monolith"].isCompleted()
-    document.getElementById("darkCubesDisplaySidebar").textContent = formatTreshold(gameData.dark_cubes)
-    document.getElementById("monolithEnergyInfo").hidden = !gameData.requirements["The Monolith"].isCompleted()
-    document.getElementById("monolithEnergyDisplay").textContent = formatTreshold(gameData.monolith_energy)
-    document.getElementById("darkCubesDisplayPage").textContent = formatTreshold(gameData.dark_cubes)
-    document.getElementById("monolithEnergyDisplayPage").textContent = formatTreshold(gameData.monolith_energy)
-    document.getElementById("monolithEnergyGainDisplay").textContent = format(getMonolithEnergyGeneration())
-    document.getElementById("monolithEnergyEffectDisplay").textContent = format(getMonolithEnergyEffect())
-    document.getElementById("darkCubeGainDisplay").textContent = format(getDarkCubeGeneration())
-    document.getElementById("darkCubeEffectDisplay").textContent = format(getDarkCubeEffect())
+    safeSetTextContent("darkOrbsDisplay", formatTreshold(gameData.dark_orbs))
+    const darkCubesInfo = document.getElementById("darkCubesInfo")
+    if (darkCubesInfo) {
+        darkCubesInfo.hidden = !gameData.requirements["The Monolith"].isCompleted()
+    }
+    safeSetTextContent("darkCubesDisplaySidebar", formatTreshold(gameData.dark_cubes))
+    const monolithEnergyInfo = document.getElementById("monolithEnergyInfo")
+    if (monolithEnergyInfo) {
+        monolithEnergyInfo.hidden = !gameData.requirements["The Monolith"].isCompleted()
+    }
+    safeSetTextContent("monolithEnergyDisplay", formatTreshold(gameData.monolith_energy))
+    safeSetTextContent("darkCubesDisplayPage", formatTreshold(gameData.dark_cubes))
+    safeSetTextContent("monolithEnergyDisplayPage", formatTreshold(gameData.monolith_energy))
+    safeSetTextContent("monolithEnergyGainDisplay", format(getMonolithEnergyGeneration()))
+    safeSetTextContent("monolithEnergyEffectDisplay", format(getMonolithEnergyEffect()))
+    safeSetTextContent("darkCubeGainDisplay", format(getDarkCubeGeneration()))
+    safeSetTextContent("darkCubeEffectDisplay", format(getDarkCubeEffect()))
 
     document.getElementById("timeWarping").hidden = (getUnpausedGameSpeed() / baseGameSpeed) <= 1
     document.getElementById("timeWarpingDisplay").textContent = "x" + format(getUnpausedGameSpeed() / baseGameSpeed, 2)
@@ -551,6 +572,10 @@ function renderDarkMatterShopButton(elemName, condition) {
 function renderBoostButton(elemName) {
     // render boost button to look nicier :)
     const boostButton = document.getElementById(elemName)
+    if (!boostButton) {
+        return
+    }
+
     if (gameData.boost_active) {
         // active
         boostButton.classList.add("perk-boost-active")
@@ -988,30 +1013,38 @@ function updateRequiredRows(data, categoryType) {
             const effectElement = requiredRow.querySelector(".effect")
             const effectValueElement = requiredRow.querySelector(".effectValue")
 
-            coinElement.classList.add("hiddenTask")
-            levelElement.classList.add("hiddenTask")
-            evilElement.classList.add("hiddenTask")
-            essenceElement.classList.add("hiddenTask")
-            darkMatterElement.classList.add("hiddenTask")
-            hypercubeElement.classList.add("hiddenTask")
-            effectElement.classList.add("hiddenTask")
+            if (coinElement) coinElement.classList.add("hiddenTask")
+            if (levelElement) levelElement.classList.add("hiddenTask")
+            if (evilElement) evilElement.classList.add("hiddenTask")
+            if (essenceElement) essenceElement.classList.add("hiddenTask")
+            if (darkMatterElement) darkMatterElement.classList.add("hiddenTask")
+            if (hypercubeElement) hypercubeElement.classList.add("hiddenTask")
+            if (effectElement) effectElement.classList.add("hiddenTask")
 
             let finalText = ""
             let effectText = ""
             if (data == gameData.taskData) {
                 const task = gameData.taskData[nextEntity.name]
-                effectElement.classList.remove("hiddenTask")
-                effectValueElement.textContent = task.unlocked ? (task.baseData.description != null ? task.baseData.description : "Income") : "Unknown"
+                if (effectElement) effectElement.classList.remove("hiddenTask")
+                if (effectValueElement) {
+                    effectValueElement.textContent = task.unlocked ? (task.baseData.description != null ? task.baseData.description : "Income") : "Unknown"
+                }
 
                 if (requirementObject instanceof EvilRequirement) {
-                    evilElement.classList.remove("hiddenTask")                    
-                    evilElement.textContent = format(requirements[0].requirement) + " evil"                   
+                    if (evilElement) {
+                        evilElement.classList.remove("hiddenTask")
+                        evilElement.textContent = format(requirements[0].requirement) + " evil"
+                    }
                 } else if (requirementObject instanceof EssenceRequirement) {
-                    essenceElement.classList.remove("hiddenTask")
-                    essenceElement.textContent = format(requirements[0].requirement) + " essence"
+                    if (essenceElement) {
+                        essenceElement.classList.remove("hiddenTask")
+                        essenceElement.textContent = format(requirements[0].requirement) + " essence"
+                    }
                 } else if (requirementObject instanceof DarkMatterRequirement) {
-                    darkMatterElement.classList.remove("hiddenTask")
-                    darkMatterElement.textContent = format(requirements[0].requirement) + " Dark Matter"
+                    if (darkMatterElement) {
+                        darkMatterElement.classList.remove("hiddenTask")
+                        darkMatterElement.textContent = format(requirements[0].requirement) + " Dark Matter"
+                    }
                 } else if (requirementObject instanceof MetaverseRequirement) {
 
                 } else if (requirementObject instanceof HypercubeRequirement) {

@@ -77,6 +77,10 @@ function formatWhole(number, decimals = 1) {
 }
 
 function formatCoins(coins, element) {
+    if (!element) {
+        return
+    }
+
     for (const c of element.children) {
         c.textContent = "";
     }
