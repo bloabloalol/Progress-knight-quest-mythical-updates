@@ -380,7 +380,7 @@ function getDarkMatterGain() {
     const mythicalKnight = gameData.taskData["Mythical Knight"]
 
 
-    return 1 * darkRuler.getEffect() * mythicalKnight.getEffect() * Mythicallity() * getDarkCubeEffect() * darkMatterHarvester * darkMatterMining * darkMatterMillionaire * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain() *
+    return 1 * darkRuler.getEffect() * mythicalKnight.getEffect() * getMythicallityDarkMatterGain() * getDarkCubeEffect() * darkMatterHarvester * darkMatterMining * darkMatterMillionaire * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain() *
         (Desintegration == 0 ? 1 : Desintegration) * (TerraninControlUnit == 0 ? 1 : TerraninControlUnit) * TheEndIsNear
 }
 
@@ -1244,8 +1244,11 @@ function loadGameData() {
             if (gameData.dark_matter == null || isNaN(gameData.dark_matter))
                 gameData.dark_matter = 0
 
-            if (gameData.dark_orbs == null || isNaN(gameData.dark_matter) || isNaN(gameData.dark_orbs))
+            if (gameData.dark_orbs == null || isNaN(gameData.dark_orbs))
                 gameData.dark_orbs = 0
+
+            if (gameData.dark_cubes == null || isNaN(gameData.dark_cubes))
+                gameData.dark_cubes = 0
 
             if (gameData.hypercubes == null || isNaN(gameData.hypercubes))
                 gameData.hypercubes = 0

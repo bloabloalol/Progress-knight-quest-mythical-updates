@@ -81,13 +81,13 @@ function getMythicallityCost() {
 }
 
 function canBuyMythicallity() {
-    return gameData.dark_orbs >= getMythicallityCost() && getMythicallityCos() != Infinity
+    return gameData.dark_orbs >= getMythicallityCost() && getMythicallityCost() != Infinity
 }
 
 function buyMythicallity() {
     if (canBuyMythicallity()) {
         gameData.dark_orbs -= getMythicallityCost()
-        gameData.dark_matter_shop.gotta_be_fast += 1
+        gameData.dark_matter_shop.mythicallity += 1
     }
 }
 
