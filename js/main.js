@@ -1,8 +1,32 @@
-onerror = () => {
-    document.getElementById("errorInfo").hidden = false
+onerror = (message, source, lineno, colno, error) => {
+    const errorInfo = document.getElementById("errorInfo")
+    const errorInfoText = document.getElementById("errorInfoText")
+    let displayMessage = "⚠️ Oh no! It looks like the 5th dimension unravelled unexpectedly. If this issue persists, feel free to contact the developer of this mod."
+
+    if (message) {
+        displayMessage = `⚠️ ${message}`
+        if (error && error.stack) {
+            const firstLine = error.stack.split("\n")[0]
+            if (firstLine && firstLine !== message) {
+                displayMessage += ` — ${firstLine}`
+            }
+        }
+    }
+
+    if (errorInfoText)
+        errorInfoText.textContent = displayMessage
+
+    if (errorInfo)
+        errorInfo.hidden = false
+
     tempData.hasError = true
+    console.error(error || message)
+
     setTimeout(() => {
-        document.getElementById("errorInfo").hidden = true
+        if (errorInfo)
+            errorInfo.hidden = true
+        if (errorInfoText)
+            errorInfoText.textContent = "⚠️ Oh no! It looks like the 5th dimension unravelled unexpectedly. If this issue persists, feel free to contact the developer of this mod."
     }, 30 * 1000)
 }
 
