@@ -124,7 +124,12 @@ function renderSideBar() {
     document.getElementById("darkOrbsDisplay").textContent = formatTreshold(gameData.dark_orbs)
     document.getElementById("darkCubesInfo").hidden = !gameData.requirements["The Monolith"].isCompleted()
     document.getElementById("darkCubesDisplaySidebar").textContent = formatTreshold(gameData.dark_cubes)
+    document.getElementById("monolithEnergyInfo").hidden = !gameData.requirements["The Monolith"].isCompleted()
+    document.getElementById("monolithEnergyDisplay").textContent = formatTreshold(gameData.monolith_energy)
     document.getElementById("darkCubesDisplayPage").textContent = formatTreshold(gameData.dark_cubes)
+    document.getElementById("monolithEnergyDisplayPage").textContent = formatTreshold(gameData.monolith_energy)
+    document.getElementById("monolithEnergyGainDisplay").textContent = format(getMonolithEnergyGeneration())
+    document.getElementById("monolithEnergyEffectDisplay").textContent = format(getMonolithEnergyEffect())
     document.getElementById("darkCubeGainDisplay").textContent = format(getDarkCubeGeneration())
     document.getElementById("darkCubeEffectDisplay").textContent = format(getDarkCubeEffect())
 

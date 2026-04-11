@@ -115,7 +115,11 @@
 				</div>
 				<div id="darkCubesInfo" class="hidden">
 					<div class="text-caption"><span class="color-dark-matter">Dark Cubes: </span><span id="darkCubesDisplaySidebar"></span></div>
-					<div style="color: gray" class="sidebar-element">Boosts Dark Matter gain when The Monolith is unlocked.</div>
+					<div style="color: gray" class="sidebar-element">Dark Cubes now affect the Monolith's power.</div>
+				</div>
+				<div id="monolithEnergyInfo" class="hidden">
+					<div class="text-caption"><span class="color-essence">Monolith Energy: </span><span id="monolithEnergyDisplay"></span></div>
+					<div style="color: gray" class="sidebar-element">Generates after The Monolith is unlocked and boosts Essence gain.</div>
 				</div>
 				<div id="timeWarping">
 					<div class="text-caption"><span class="color-time-warping">Time Warping: </span><span id="timeWarpingDisplay"></span></div>
@@ -818,10 +822,13 @@
 					<div class="tab column" style="display:none" id="monolith">
 						<div id="monolithPage" class="panel page-column w3-padding">
 							<div class="text-caption"><b>The Monolith</b></div>
-							<div class="text-caption">The Monolith is the final stage of your Mythical journey. Its presence unlocks Dark Cubes, a new resource that strengthens your Dark Matter output.</div>
+							<div class="text-caption">The Monolith is the final stage of your Mythical journey. Its presence unlocks Dark Cubes and Monolith Energy, a new power that supports your Essence growth.</div>
 							<div class="text-caption" style="padding-top: 1em;"><span class="color-dark-matter">Dark Cubes:</span> <span id="darkCubesDisplayPage"></span></div>
 							<div class="text-caption">Gain: <span id="darkCubeGainDisplay"></span> per year</div>
-							<div class="text-caption">Current Monolith bonus: x<span id="darkCubeEffectDisplay"></span> Dark Matter gain.</div>
+							<div class="text-caption">Monolith Energy: <span id="monolithEnergyDisplayPage"></span></div>
+							<div class="text-caption">Energy gain: <span id="monolithEnergyGainDisplay"></span> per year</div>
+							<div class="text-caption">Monolith Energy effect: x<span id="monolithEnergyEffectDisplay"></span> Essence gain</div>
+							<div class="text-caption">Current Monolith bonus: x<span id="darkCubeEffectDisplay"></span> from Dark Cubes.</div>
 							<div class="text-caption" style="color: gray; padding-top: 1em;">Dark Cubes are unlocked by the Mythical milestone <b>The Monolith</b>. Build them slowly and let the Monolith feed your darkness.</div>
 						</div>
 					</div>

@@ -310,8 +310,6 @@ function getEvilXpGain() {
 }
 
 function getEssence() {
-    if (gameData.essence == Infinity || gameData.essence > 1e308)
-        return 1e308
     return gameData.essence
 }
 
@@ -390,7 +388,7 @@ function getEssenceGain() {
     return Cultivating.getEffect() * essenceControl.getEffect() * essenceCollector.getEffect() * transcendentMaster.getEffect()
         * faintHope.getEffect() * rise.getEffect() * getChallengeBonus("dance_with_the_devil")
         * getAGiftFromGodEssenceGain() * darkMagician.getEffect() * getDarkMatterSkillEssence() 
-        * theNewGold * lifeIsValueable *  essenceMultGain() * darkCubeEssence * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
+        * theNewGold * lifeIsValueable *  essenceMultGain() * getMonolithEnergyEffect() * darkCubeEssence * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
 }
 
 function getDarkMatterGain() {
@@ -785,8 +783,6 @@ function rebirthThree() {
 
     gameData.rebirthThreeCount += 1
     gameData.essence += getEssenceGain()
-    if (gameData.essence == Infinity || gameData.essence > 1e308)
-        gameData.essence = 1e308
     gameData.evil = evilTranGain()
 
     resetEvilPerks()
@@ -952,8 +948,6 @@ function applyMilestones() {
                 gameData.essence = 1
             if (gameData.essence < getEssenceGain() * 10)
                 gameData.essence *= Math.pow(1.002, 1)
-            if (gameData.essence == Infinity || gameData.essence > 1e308)
-                gameData.essence = 1e308
         }
     }
 }
@@ -1274,6 +1268,9 @@ function loadGameData() {
             if (gameData.dark_cubes == null || isNaN(gameData.dark_cubes))
                 gameData.dark_cubes = 0
 
+            if (gameData.monolith_energy == null || isNaN(gameData.monolith_energy))
+                gameData.monolith_energy = 0
+
             if (gameData.hypercubes == null || isNaN(gameData.hypercubes))
                 gameData.hypercubes = 0
 
@@ -1331,6 +1328,7 @@ function update(needUpdateUI = true) {
     gameData.evil_perks_points += applySpeed(getEvilPerksGeneration())
     gameData.dark_orbs += applySpeed(getDarkOrbGeneration())
     gameData.dark_cubes += applySpeed(getDarkCubeGeneration())
+    gameData.monolith_energy += applySpeed(getMonolithEnergyGeneration())
     gameData.hypercubes += applySpeed(getHypercubeGeneration())
     if (gameData.hypercubes > getHypercubeCap())
         gameData.hypercubes = getHypercubeCap()
@@ -1354,8 +1352,6 @@ function applyPerks() {
     if (gameData.perks.instant_essence == 1) {
         if (gameData.essence < getEssenceGain() * 10)
             gameData.essence = getEssenceGain() * 10
-        if (gameData.essence == Infinity || gameData.essence > 1e308)
-            gameData.essence = 1e308
     }
 
     if (gameData.perks.instant_dark_matter == 1) {

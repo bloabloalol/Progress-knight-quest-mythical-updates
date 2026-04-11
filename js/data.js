@@ -19,6 +19,7 @@
     dark_matter: 0,
     dark_orbs: 0,
     dark_cubes: 0,
+    monolith_energy: 0,
     hypercubes: 0,
     perks_points: 0,
     perks: {

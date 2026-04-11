@@ -131,6 +131,15 @@ function getDarkCubeEffect() {
     return effect
 }
 
+function getMonolithEnergyGeneration() {
+    if (!gameData.requirements["The Monolith"].isCompleted()) return 0
+    return 0.01
+}
+
+function getMonolithEnergyEffect() {
+    return 1 + 0.02 * gameData.monolith_energy
+}
+
 function getDarkCubeEssenceBonus() {
     return gameData.requirements["Eternal Cube"].isCompleted() ? 1 + 0.02 * gameData.dark_cubes : 1
 }
