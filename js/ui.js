@@ -44,12 +44,14 @@ function updateUI() {
 
     if (currentTab == Tab.JOBS) {
         updateRequiredRows(gameData.taskData, jobCategories)
+        updateTaskRowVisibility(jobCategories)
         renderHeaderRows(jobCategories)
         renderJobs()
     }
 
     if (currentTab == Tab.SKILLS || gameData.settings.layout == 0 && currentTab == Tab.JOBS) {
         updateRequiredRows(gameData.taskData, skillCategories)
+        updateTaskRowVisibility(skillCategories)
         renderHeaderRows(skillCategories)
         renderSkills()
     }
@@ -907,18 +909,36 @@ function renderHeaderRows(categories) {
 
         const visible = isCategoryVisible(categoryName, categories)
         Array.from(document.getElementsByClassName(className)).forEach(element => {
-            element.classList.toggle("hidden", !visible)
+            if (element.classList.contains("headerRow") || element.classList.contains("requiredRow")) {
+                element.classList.toggle("hidden", !visible)
+            }
         })
     }
 }
 
+function isTaskVisible(taskName) {
+    const requirement = gameData.requirements[taskName]
+    return requirement ? requirement.isCompleted() : true
+}
+
 function isCategoryVisible(categoryName, categories) {
-    if (categories == jobCategories && categoryName == "Mythical Alignments") {
-        const firstTask = categories[categoryName][0]
-        const requirement = gameData.requirements[firstTask]
-        return requirement && requirement.isCompletedActual()
+    if (categories == jobCategories || categories == skillCategories) {
+        const category = categories[categoryName]
+        return category.some(taskName => isTaskVisible(taskName))
     }
     return true
+}
+
+function updateTaskRowVisibility(categoryType) {
+    for (const categoryName in categoryType) {
+        const category = categoryType[categoryName]
+        for (const taskName of category) {
+            const row = getRowByName(taskName)
+            if (row) {
+                row.classList.toggle("hidden", !isTaskVisible(taskName))
+            }
+        }
+    }
 }
 
 function createRequiredRow(categoryName) {
@@ -959,6 +979,10 @@ function createRow(templates, name, categoryName, categoryType) {
     row.getElementsByClassName("tooltipText")[0].textContent = tooltips[name]
     row.id = "row" + removeSpaces(removeStrangeCharacters(name))
     row.classList.add(removeSpaces(categoryName))
+
+    if ((categoryType == jobCategories || categoryType == skillCategories) && !isTaskVisible(name)) {
+        row.classList.add("hidden")
+    }
 
     if (categoryType == itemCategories) {
         row.getElementsByClassName("button")[0].onclick = categoryName == "Properties" ? () => { setCurrentProperty(name) } : () => { setMisc(name) }
