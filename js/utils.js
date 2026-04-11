@@ -76,6 +76,14 @@ function formatWhole(number, decimals = 1) {
     return format(number, 0);
 }
 
+function safeSetTextContent(id, text) {
+    const element = document.getElementById(id)
+    if (element) {
+        element.textContent = text
+    }
+    return element
+}
+
 function formatCoins(coins, element) {
     if (!element) {
         return
