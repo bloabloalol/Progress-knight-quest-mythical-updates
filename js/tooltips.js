@@ -122,6 +122,12 @@ const tooltips = {
 
     // Mythical
     "Mythical Knight": "Rebirthing again and again, you find yourself stuck in a loop. You try anything to break free from this immortal curse",
+    "Eternal Knight": "Your endless rebirths forge a knight whose resolve never fades. Time itself is weaponized to harvest more dark power.",
+    "Celestial Knight": "The knight draws cosmic authority from every universe, bending reality in service of immense strength.",
+    "Omni Knight": "All domains of power converge in this knight, granting mastery over every battlefield and resource.",
+    "Transcendent Knight": "You transcend ordinary limits, shaping every repeat cycle into a new source of power.",
+    "Infinity Knight": "Your power stretches beyond the finite, pulling infinite dark energy into your arsenal.",
+    "Singularity Knight": "A singularity of strength collapses around you, concentrating all growth into a devastating edge.",
     // Properties
     "Homeless": "Sleep on the uncomfortable, filthy streets while almost freezing to death every night. It cannot get any worse than this.",
     "Tent": "A thin sheet of tattered cloth held up by a couple of feeble, wooden sticks. Horrible living conditions but at least you have a roof over your head.",

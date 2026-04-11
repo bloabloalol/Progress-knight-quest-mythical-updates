@@ -141,7 +141,7 @@ var autoBuyEnabled = true
 const updateSpeed = 20
 const baseLifespan = 365 * 70
 const baseGameSpeed = 4
-const heroIncomeMult = 2.5e18
+const heroIncomeMult = 1e18
 
 const permanentUnlocks = ["Quick task display", "Evil perks", "Rebirth tab", "Dark Matter", "Dark Matter Skills", "Dark Matter Skills2", "Metaverse", "Metaverse Perks", "Metaverse Perks Button", "Congratulations"]
 const metaverseUnlocks = ["Reduce Boost Cooldown", "Increase Boost Duration", "Increase Hypercube Gain", "Gain evil at new transcension",
@@ -257,6 +257,12 @@ const skillBaseData = {
     "Blinded By Darkness": { name: "Blinded By Darkness", maxXp: 100, heroxp: 550, effect: 1, description: "All XP" },
 
     "Mythical Knight": { name: "Mythical Knight", maxXp: 100, heroxp: 375, effect: 0.0000001, description: "Dark Matter Gain" },
+    "Eternal Knight": { name: "Eternal Knight", maxXp: 100, heroxp: 380, effect: 0.00000025, description: "Dark Matter Gain" },
+    "Celestial Knight": { name: "Celestial Knight", maxXp: 100, heroxp: 390, effect: 0.000001, description: "All XP" },
+    "Omni Knight": { name: "Omni Knight", maxXp: 100, heroxp: 400, effect: 0.000002, description: "All XP" },
+    "Transcendent Knight": { name: "Transcendent Knight", maxXp: 100, heroxp: 410, effect: 0.000003, description: "All XP" },
+    "Infinity Knight": { name: "Infinity Knight", maxXp: 100, heroxp: 420, effect: 0.000006, description: "Dark Matter Gain" },
+    "Singularity Knight": { name: "Singularity Knight", maxXp: 100, heroxp: 430, effect: 0.000012, description: "All XP" },
 }
 
 const itemBaseData = {
@@ -502,6 +508,12 @@ const requirementsBaseData = {
 
     // Mythical
     "Mythical Knight": new AgeRequirement([getQuerySelector("Mythical Knight")], [{ requirement: 1000000000000000000000000000 }]),
+    "Eternal Knight": new TaskRequirement([getQuerySelector("Eternal Knight")], [{ task: "Mythical Knight", requirement: 25 }]),
+    "Celestial Knight": new TaskRequirement([getQuerySelector("Celestial Knight")], [{ task: "Eternal Knight", requirement: 50 }]),
+    "Omni Knight": new TaskRequirement([getQuerySelector("Omni Knight")], [{ task: "Celestial Knight", requirement: 75 }]),
+    "Transcendent Knight": new TaskRequirement([getQuerySelector("Transcendent Knight")], [{ task: "Omni Knight", requirement: 25 }]),
+    "Infinity Knight": new TaskRequirement([getQuerySelector("Infinity Knight")], [{ task: "Transcendent Knight", requirement: 50 }]),
+    "Singularity Knight": new TaskRequirement([getQuerySelector("Singularity Knight")], [{ task: "Infinity Knight", requirement: 75 }]),
 
     // Properties
     "Homeless": new CoinRequirement([getQuerySelector("Homeless")], [{ requirement: 0 }]),
@@ -642,7 +654,7 @@ const skillCategories = {
     "Celestial Powers": ["Cosmic Longevity", "Cosmic Recollection", "Essence Collector", "Galactic Command"],
     "Almightiness": ["Yin Yang", "Parallel Universe", "Higher Dimensions", "Epiphany"],
     "Darkness": ["Dark Prince", "Dark Ruler", "Immortal Ruler", "Dark Magician", "Universal Ruler", "Blinded By Darkness"],
-    "Mythical Powers": ["Mythical Knight"],
+    "Mythical Powers": ["Mythical Knight", "Eternal Knight", "Celestial Knight", "Omni Knight", "Transcendent Knight", "Infinity Knight", "Singularity Knight"],
 }
 
 const itemCategories = {

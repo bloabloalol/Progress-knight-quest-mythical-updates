@@ -809,12 +809,16 @@ function rebirthFour() {
     if (!gameData.requirements["Rebirth button 4"].isCompleted())
         return;
 
+    const preserveMilestones = gameData.essence > 0
+
     gameData.rebirthFourCount += 1
     gameData.essence = 0
     gameData.evil = 0
     gameData.dark_matter += getDarkMatterGain()
     gameData.evil_perks_points = 0
     gameData.evil_perks.receive_essence = 0
+
+    resetEvilPerks()
 
     if (gameData.metaverse.challenge_altar == 0 && gameData.perks.save_challenges == 0)  {
         for (const challenge in gameData.challenges) {
@@ -830,7 +834,7 @@ function rebirthFour() {
     gameData.rebirthThreeTime = 0
     gameData.rebirthFourTime = 0
 
-    rebirthReset()
+    rebirthReset(true, false)
 
     for (const taskName in gameData.taskData) {
         const task = gameData.taskData[taskName]
@@ -952,7 +956,7 @@ function applyMilestones() {
     }
 }
 
-function rebirthReset(set_tab_to_jobs = true) {
+function rebirthReset(set_tab_to_jobs = true, preserveDarkMatterMilestones = true) {
     if (set_tab_to_jobs) {
         // if (gameData.settings.selectedTab == Tab.METAVERSE && gameData.perks.)
 
@@ -1004,8 +1008,8 @@ function rebirthReset(set_tab_to_jobs = true) {
         requirement.completed = false
     }
 
-    // Keep milestones which were bought in the Dark Matter shop
-    if (gameData.dark_matter_shop.a_miracle) {
+    // Keep milestones which were bought in the Dark Matter shop unless this is a collapse
+    if (preserveDarkMatterMilestones && gameData.dark_matter_shop.a_miracle) {
         gameData.requirements["Magic Eye"].completed = true
         if (gameData.rebirthOneCount == 0)
             gameData.rebirthOneCount = 1
