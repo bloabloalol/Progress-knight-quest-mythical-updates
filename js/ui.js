@@ -154,6 +154,13 @@ function renderSideBar() {
     if (monolithEnergyInfo) {
         monolithEnergyInfo.hidden = !gameData.requirements["The Monolith"].isCompleted()
     }
+    const monolithTabButton = document.getElementById("monolithTabButton")
+    if (monolithTabButton) {
+        monolithTabButton.classList.toggle("hidden", !gameData.requirements["The Monolith"].isCompleted())
+    }
+    if (!gameData.requirements["The Monolith"].isCompleted() && gameData.settings.selectedTab == 'monolith') {
+        setTab('jobs')
+    }
     safeSetTextContent("monolithEnergyDisplay", formatTreshold(gameData.monolith_energy))
     safeSetTextContent("darkCubesDisplayPage", formatTreshold(gameData.dark_cubes))
     safeSetTextContent("monolithEnergyDisplayPage", formatTreshold(gameData.monolith_energy))

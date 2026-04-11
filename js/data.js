@@ -141,7 +141,7 @@ var autoBuyEnabled = true
 const updateSpeed = 20
 const baseLifespan = 365 * 70
 const baseGameSpeed = 4
-const heroIncomeMult = 1e18
+const heroIncomeMult = 2.5e18
 
 const permanentUnlocks = ["Quick task display", "Evil perks", "Rebirth tab", "Dark Matter", "Dark Matter Skills", "Dark Matter Skills2", "Metaverse", "Metaverse Perks", "Metaverse Perks Button", "Congratulations"]
 const metaverseUnlocks = ["Reduce Boost Cooldown", "Increase Boost Duration", "Increase Hypercube Gain", "Gain evil at new transcension",
@@ -202,10 +202,10 @@ const jobBaseData = {
 }
 
 const skillBaseData = {
-    "Concentration": { name: "Concentration", maxXp: 100, heroxp: 36, effect: 1, description: "Skill XP" }, // 0.01
-    "Productivity": { name: "Productivity", maxXp: 100, heroxp: 37, effect: 1, description: "Hero XP" }, // 0.01
+    "Concentration": { name: "Concentration", maxXp: 100, heroxp: 36, effect: 0.01, description: "Skill XP" },
+    "Productivity": { name: "Productivity", maxXp: 100, heroxp: 37, effect: 0.01, description: "Hero XP" },
     "Bargaining": { name: "Bargaining", maxXp: 100, heroxp: 38, effect: -0.01, description: "Reduced Expenses" },
-    "Meditation": { name: "Meditation", maxXp: 100, heroxp: 39, effect: 1000, description: "Happiness" }, // 0.01
+    "Meditation": { name: "Meditation", maxXp: 100, heroxp: 39, effect: 0.01, description: "Happiness" },
     "Cultivation": { name: "Cultivation", maxXp: 100, heroxp: 40, effect: 5, description: "Essence Gain"},
 
     "Strength": { name: "Strength", maxXp: 100, heroxp: 41, effect: 0.01, description: "Military Pay" },
@@ -225,7 +225,7 @@ const skillBaseData = {
     "Intimidation": { name: "Intimidation", maxXp: 100, heroxp: 157, effect: -0.01, description: "Reduced Expenses" },
     "Demon Training": { name: "Demon Training", maxXp: 100, heroxp: 174, effect: 0.01, description: "All XP" },
     "Blood Meditation": { name: "Blood Meditation", maxXp: 100, heroxp: 176, effect: 0.01, description: "Evil Gain" },
-    "Demon's Wealth": { name: "Demon's Wealth", maxXp: 100, heroxp: 178, effect: 10, description: "Hero Pay" }, // effect: 0.002
+    "Demon's Wealth": { name: "Demon's Wealth", maxXp: 100, heroxp: 178, effect: 0.002, description: "Hero Pay" },
     "Dark Knowledge": { name: "Dark Knowledge", maxXp: 100, heroxp: 180, effect: 0.003, description: "Hero XP" },
 
     "Void Influence": { name: "Void Influence", maxXp: 100, heroxp: 206, effect: 0.0028, description: "All XP" },

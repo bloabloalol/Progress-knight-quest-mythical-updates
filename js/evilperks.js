@@ -4,10 +4,8 @@ function getEvilPerksGeneration()
 	let essence_perk_buff_mult = 1e9
 	if (gameData.essence == 0)
 		essence_perk_buff_mult = 10
-	else if (gameData.essence<1e308/essence_perk_buff_mult)
-		essence_perk_buff_mult *= gameData.essence
 	else
-		essence_perk_buff_mult = 1e308
+		essence_perk_buff_mult *= gameData.essence
 	return math.log10(gameData.evil + 1) * math.log10(essence_perk_buff_mult) / 365	
 }
 
@@ -61,8 +59,6 @@ function getEvilPerkCost(evilperknum){
 			return Infinity
 		return math.pow(5, gameData.evil_perks.reduce_celestial_requirement + 1) + 6666-5
 	case 5:
-		if (gameData.essence >= 1e308)
-			return Infinity
 		return math.pow(10, gameData.evil_perks.receive_essence) * 6.66e9
 	}	
 }
