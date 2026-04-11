@@ -361,11 +361,12 @@ function getEssenceGain() {
     const lifeIsValueable = gameData.requirements["Life is valueable"].isCompleted() ? gameData.dark_matter : 1
 
     const IllumininCoreShield = gameData.itemData['Illuminin Core Shield'].getEffect()
+    const darkCubeEssence = getDarkCubeEssenceBonus()
 
     return Cultivating.getEffect() * essenceControl.getEffect() * essenceCollector.getEffect() * transcendentMaster.getEffect()
         * faintHope.getEffect() * rise.getEffect() * getChallengeBonus("dance_with_the_devil")
         * getAGiftFromGodEssenceGain() * darkMagician.getEffect() * getDarkMatterSkillEssence() 
-        * theNewGold * lifeIsValueable *  essenceMultGain() * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
+        * theNewGold * lifeIsValueable *  essenceMultGain() * darkCubeEssence * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
 }
 
 function getDarkMatterGain() {
@@ -379,7 +380,7 @@ function getDarkMatterGain() {
     const mythicalKnight = gameData.taskData["Mythical Knight"]
 
 
-    return 1 * darkRuler.getEffect() * mythicalKnight.getEffect() * Mythicallity() * darkMatterHarvester * darkMatterMining * darkMatterMillionaire * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain() *
+    return 1 * darkRuler.getEffect() * mythicalKnight.getEffect() * Mythicallity() * getDarkCubeEffect() * darkMatterHarvester * darkMatterMining * darkMatterMillionaire * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain() *
         (Desintegration == 0 ? 1 : Desintegration) * (TerraninControlUnit == 0 ? 1 : TerraninControlUnit) * TheEndIsNear
 }
 
@@ -1302,6 +1303,7 @@ function update(needUpdateUI = true) {
 
     gameData.evil_perks_points += applySpeed(getEvilPerksGeneration())
     gameData.dark_orbs += applySpeed(getDarkOrbGeneration())
+    gameData.dark_cubes += applySpeed(getDarkCubeGeneration())
     gameData.hypercubes += applySpeed(getHypercubeGeneration())
     if (gameData.hypercubes > getHypercubeCap())
         gameData.hypercubes = getHypercubeCap()

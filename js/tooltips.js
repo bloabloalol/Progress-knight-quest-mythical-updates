@@ -51,12 +51,12 @@ const tooltips = {
     "Omega": "ω",
 
     // Mythical Knights
-    "Knight Of Darkness": "The first of the 9 progress knights",
-    //Knight of Chaos
-    //Knight of Calamity
-    //Knight of Destruction
-    //Knight of Corruption
-    //Knight of 
+    "Knight Of Darkness": "The first of the 9 progress knights.",
+    "Knight Of Chaos": "A sentry of raw entropy, able to tear apart order with a single strike.",
+    "Knight Of Calamity": "A herald of ruin whose presence warps the battlefield into catastrophe.",
+    "Knight Of Destruction": "A force of annihilation that rends reality and leaves only shadow.",
+    "Knight Of Corruption": "A fallen sovereign whose power corrupts enemy forces and steals their strength.",
+    "Knight Of Oblivion": "The final knight, whose existence erases the boundary between the living and the void.",
 
     // Fundamentals
     "Concentration": "Improve your learning speed through practising intense concentration activities.",
@@ -242,4 +242,6 @@ const tooltips = {
     // Mythical Milestones
     "A New Path": "You thought you were free",
     "The Monolith": "Someone or something is watching...",
+    "Monolithic Might": "You can feel the Monolith's power seeping into every Dark Cube.",
+    "Eternal Cube": "The Dark Cubes now resonate with both Essence and Darkness.",
 }

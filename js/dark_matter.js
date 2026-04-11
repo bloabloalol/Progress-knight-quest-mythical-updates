@@ -124,6 +124,24 @@ function getGottaBeFastGain() {
     return 1 + 0.2 * gameData.dark_matter_shop.gotta_be_fast
 }
 
+function getDarkCubeEffect() {
+    let effect = 1 + 0.05 * gameData.dark_cubes
+    if (gameData.requirements["Monolithic Might"].isCompleted())
+        effect *= 1.5
+    return effect
+}
+
+function getDarkCubeEssenceBonus() {
+    return gameData.requirements["Eternal Cube"].isCompleted() ? 1 + 0.02 * gameData.dark_cubes : 1
+}
+
+function getDarkCubeGeneration() {
+    if (!gameData.requirements["The Monolith"].isCompleted()) return 0
+    if (gameData.dark_matter == 0) return 0
+
+    return getDarkMatterGain() / getDarkCubeEffect() * 0.001
+}
+
 function getMythicallityDarkMatterGain() {
     if (gameData.active_challenge == "the_darkest_time") return 1
 

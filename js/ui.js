@@ -122,6 +122,11 @@ function renderSideBar() {
     document.getElementById("darkMatterGainButtonDisplay").textContent = "+" + format(getDarkMatterGain())
 
     document.getElementById("darkOrbsDisplay").textContent = formatTreshold(gameData.dark_orbs)
+    document.getElementById("darkCubesInfo").hidden = !gameData.requirements["The Monolith"].isCompleted()
+    document.getElementById("darkCubesDisplaySidebar").textContent = formatTreshold(gameData.dark_cubes)
+    document.getElementById("darkCubesDisplayPage").textContent = formatTreshold(gameData.dark_cubes)
+    document.getElementById("darkCubeGainDisplay").textContent = format(getDarkCubeGeneration())
+    document.getElementById("darkCubeEffectDisplay").textContent = format(getDarkCubeEffect())
 
     document.getElementById("timeWarping").hidden = (getUnpausedGameSpeed() / baseGameSpeed) <= 1
     document.getElementById("timeWarpingDisplay").textContent = "x" + format(getUnpausedGameSpeed() / baseGameSpeed, 2)

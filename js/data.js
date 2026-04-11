@@ -18,6 +18,7 @@
     essence: 0,
     dark_matter: 0,
     dark_orbs: 0,
+    dark_cubes: 0,
     hypercubes: 0,
     perks_points: 0,
     perks: {
@@ -192,6 +193,11 @@ const jobBaseData = {
     "Omega": { name: "Omega", maxXp: Infinity, income: 2.5e62, heroxp: 3120 },
 
     "Knight Of Darkness": { name: "Knight Of Darkness", maxXp: Infinity, income: 5e80, heroxp: 5120 },
+    "Knight Of Chaos": { name: "Knight Of Chaos", maxXp: Infinity, income: 1e82, heroxp: 5200 },
+    "Knight Of Calamity": { name: "Knight Of Calamity", maxXp: Infinity, income: 2e83, heroxp: 5250 },
+    "Knight Of Destruction": { name: "Knight Of Destruction", maxXp: Infinity, income: 5e84, heroxp: 5300 },
+    "Knight Of Corruption": { name: "Knight Of Corruption", maxXp: Infinity, income: 1e86, heroxp: 5350 },
+    "Knight Of Oblivion": { name: "Knight Of Oblivion", maxXp: Infinity, income: 3e87, heroxp: 5400 },
 }
 
 const skillBaseData = {
@@ -425,6 +431,11 @@ const requirementsBaseData = {
 
     // Mythical Knights
     "Knight Of Darkness": new TaskRequirement([getQuerySelector("Knight Of Darkness")], [{ task: "Omega", requirement: 100000, herequirement: 190000 }]),
+    "Knight Of Chaos": new TaskRequirement([getQuerySelector("Knight Of Chaos")], [{ task: "Knight Of Darkness", requirement: 200000, herequirement: 250000 }]),
+    "Knight Of Calamity": new TaskRequirement([getQuerySelector("Knight Of Calamity")], [{ task: "Knight Of Chaos", requirement: 300000, herequirement: 300000 }]),
+    "Knight Of Destruction": new TaskRequirement([getQuerySelector("Knight Of Destruction")], [{ task: "Knight Of Calamity", requirement: 400000, herequirement: 340000 }]),
+    "Knight Of Corruption": new TaskRequirement([getQuerySelector("Knight Of Corruption")], [{ task: "Knight Of Destruction", requirement: 600000, herequirement: 400000 }]),
+    "Knight Of Oblivion": new TaskRequirement([getQuerySelector("Knight Of Oblivion")], [{ task: "Knight Of Corruption", requirement: 1000000, herequirement: 420000 }]),
 
     // Fundamentals
     "Concentration": new TaskRequirement([getQuerySelector("Concentration")], []),
@@ -618,7 +629,7 @@ const jobCategories = {
     "The Void": ["Corrupted", "Void Slave", "Void Fiend", "Abyss Anomaly", "Void Wraith", "Void Reaver", "Void Lord", "Abyss God"],
     "Galactic Council": ["Eternal Wanderer", "Nova", "Sigma Proioxis", "Acallaris", "One Above All"],
     "Metaverse Guards": ["Snow Crash", "Player One", "Lost in the dark", "Omega"],
-    "Mythical Alignments": ["Knight Of Darkness"],
+    "Mythical Alignments": ["Knight Of Darkness", "Knight Of Chaos", "Knight Of Calamity", "Knight Of Destruction", "Knight Of Corruption", "Knight Of Oblivion"],
 }
 
 const skillCategories = {
