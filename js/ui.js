@@ -109,15 +109,15 @@ function renderSideBar() {
 
     document.getElementById("happinessDisplay").textContent = format(getHappiness())
 
-    document.getElementById("evilDisplay").textContent = format(gameData.evil)
-    document.getElementById("evilGainDisplay").textContent = format(getEvilGain())
-    document.getElementById("evilGainButtonDisplay").textContent = "+" + format(getEvilGain())
+    safeSetTextContent("evilDisplay", format(gameData.evil))
+    safeSetTextContent("evilGainDisplay", format(getEvilGain()))
+    safeSetTextContent("evilGainButtonDisplay", "+" + format(getEvilGain()))
 
-    document.getElementById("essenceDisplay").textContent = format(gameData.essence)
-    document.getElementById("essenceGainDisplay").textContent = format(getEssenceGain())
-    document.getElementById("essenceGainButtonDisplay").textContent = "+" + format(getEssenceGain())
+    safeSetTextContent("essenceDisplay", format(gameData.essence))
+    safeSetTextContent("essenceGainDisplay", format(getEssenceGain()))
+    safeSetTextContent("essenceGainButtonDisplay", "+" + format(getEssenceGain()))
 
-    document.getElementById("darkMatterDisplay").textContent = format(gameData.dark_matter)
+    safeSetTextContent("darkMatterDisplay", format(gameData.dark_matter))
     document.getElementById("darkMatterGainDisplay").textContent = format(getDarkMatterGain())
     document.getElementById("darkMatterGainButtonDisplay").textContent = "+" + format(getDarkMatterGain())
 
@@ -542,7 +542,10 @@ function renderMilestones() {
 }
 
 function renderDarkMatterShopButton(elemName, condition) {
-    document.getElementById(elemName).disabled = !condition    
+    const element = document.getElementById(elemName)
+    if (element) {
+        element.disabled = !condition
+    }
 }
 
 function renderBoostButton(elemName) {
@@ -679,38 +682,48 @@ function renderPerks() {
 
 function renderDarkMatter() {
     // Display currency
-    document.getElementById("darkMatterShopDisplay").textContent = format(gameData.dark_matter)
-    document.getElementById("darkMatterSkillsDisplay").textContent = gameData.settings.layout == 0 ? "" : format(gameData.dark_matter)    
-    document.getElementById("darkOrbsShopDisplay").textContent = formatTreshold(gameData.dark_orbs)
+    safeSetTextContent("darkMatterShopDisplay", format(gameData.dark_matter))
+    const darkMatterSkillsDisplay = document.getElementById("darkMatterSkillsDisplay")
+    if (darkMatterSkillsDisplay)
+        darkMatterSkillsDisplay.textContent = gameData.settings.layout == 0 ? "" : format(gameData.dark_matter)
+    safeSetTextContent("darkOrbsShopDisplay", formatTreshold(gameData.dark_orbs))
 
     // Dark Matter Shop
-    document.getElementById("darkOrbGeneratorCost").textContent = format(getDarkOrbGeneratorCost())
-    document.getElementById("darkOrbGenerator").textContent = format(getDarkOrbGeneration())
+    safeSetTextContent("darkOrbGeneratorCost", format(getDarkOrbGeneratorCost()))
+    const darkOrbGenerator = document.getElementById("darkOrbGenerator")
+    if (darkOrbGenerator)
+        darkOrbGenerator.textContent = format(getDarkOrbGeneration())
 
-    document.getElementById("aDealWithTheChairmanCost").textContent = format(getADealWithTheChairmanCost())
-    document.getElementById("aDealWithTheChairmanEffect").textContent = format(getTaaAndMagicXpGain())
+    safeSetTextContent("aDealWithTheChairmanCost", format(getADealWithTheChairmanCost()))
+    safeSetTextContent("aDealWithTheChairmanEffect", format(getTaaAndMagicXpGain()))
 
-    document.getElementById("aGiftFromGodEffect").textContent = format(getAGiftFromGodEssenceGain())
-    document.getElementById("aGiftFromGodCost").textContent = format(getAGiftFromGodCost())
+    safeSetTextContent("aGiftFromGodEffect", format(getAGiftFromGodEssenceGain()))
+    safeSetTextContent("aGiftFromGodCost", format(getAGiftFromGodCost()))
 
-    document.getElementById("lifeCoachEffect").textContent = format(getLifeCoachIncomeGain())
-    document.getElementById("lifeCoachCost").textContent = format(getLifeCoachCost())
+    safeSetTextContent("lifeCoachEffect", format(getLifeCoachIncomeGain()))
+    safeSetTextContent("lifeCoachCost", format(getLifeCoachCost()))
 
-    document.getElementById("gottaBeFastEffect").textContent = format(getGottaBeFastGain(), 2)
-    document.getElementById("gottaBeFastCost").textContent = format(getGottaBeFastCost())
+    safeSetTextContent("gottaBeFastEffect", format(getGottaBeFastGain(), 2))
+    safeSetTextContent("gottaBeFastCost", format(getGottaBeFastCost()))
 
-    document.getElementById("MythicallityEffect").textContent = format(getMythicallityDarkMatterGain())
-    document.getElementById("MythicallityCost").textContent = format(getMythicallityCost())
+    safeSetTextContent("MythicallityEffect", format(getMythicallityDarkMatterGain()))
+    safeSetTextContent("MythicallityCost", format(getMythicallityCost()))
 
-    if (gameData.dark_matter_shop.a_miracle)
-        document.getElementById("aMiracleBuyButton").classList.add("hidden")
-    else
-        document.getElementById("aMiracleBuyButton").classList.remove("hidden")
+    const aMiracleBuyButton = document.getElementById("aMiracleBuyButton")
+    if (aMiracleBuyButton) {
+        if (gameData.dark_matter_shop.a_miracle)
+            aMiracleBuyButton.classList.add("hidden")
+        else
+            aMiracleBuyButton.classList.remove("hidden")
+    }
 
-    if (getDarkOrbGeneration() != Infinity)
-        document.getElementById("darkOrbGeneratorBuyButton").classList.remove("hidden")
-    else
-        document.getElementById("darkOrbGeneratorBuyButton").classList.add("hidden")
+    const darkOrbGeneratorBuyButton = document.getElementById("darkOrbGeneratorBuyButton")
+    if (darkOrbGeneratorBuyButton) {
+        if (getDarkOrbGeneration() != Infinity)
+            darkOrbGeneratorBuyButton.classList.remove("hidden")
+        else
+            darkOrbGeneratorBuyButton.classList.add("hidden")
+    }
 
     // enable/disable buttons
 
@@ -1201,6 +1214,10 @@ function setFontSize(id) {
 }
 
 function renderSkillTreeButton(element, categoryBought, elementBought, canBuy) {
+    if (!element) {
+        return
+    }
+
     if (gameData.perks.both_dark_mater_skills == 0) {
 
         element.disabled = categoryBought | !canBuy
@@ -1322,12 +1339,16 @@ function setTabSettings(tab) {
 
 function setTabDarkMatter(tab) {
     const element = document.getElementById(tab + "TabButton")
+    const tabElement = document.getElementById(tab)
+    if (!element || !tabElement) {
+        return
+    }
 
     const tabs = Array.prototype.slice.call(document.getElementsByClassName("tabDarkMatter"))
     tabs.forEach(function (tab) {
         tab.style.display = "none"
     })
-    document.getElementById(tab).style.display = "flex"
+    tabElement.style.display = "flex"
 
     const tabButtons = document.getElementsByClassName("tabButtonDarkMatter")
     for (const tabButton of tabButtons) {
