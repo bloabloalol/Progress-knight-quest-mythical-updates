@@ -250,4 +250,5 @@ const tooltips = {
     "The Monolith": "Someone or something is watching...",
     "Monolithic Might": "You can feel the Monolith's power seeping into every Dark Cube.",
     "Eternal Cube": "The Dark Cubes now resonate with both Essence and Darkness.",
+    "Abyssal Paragon": "Your Dark Cubes begin to perfect the rhythm of the Monolith.",
 }

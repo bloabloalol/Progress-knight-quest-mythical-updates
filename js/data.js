@@ -207,6 +207,7 @@ const jobBaseData = {
     "Knight Of Destruction": { name: "Knight Of Destruction", maxXp: Infinity, income: 5e84, heroxp: 5300 },
     "Knight Of Corruption": { name: "Knight Of Corruption", maxXp: Infinity, income: 1e86, heroxp: 5350 },
     "Knight Of Oblivion": { name: "Knight Of Oblivion", maxXp: Infinity, income: 3e87, heroxp: 5400 },
+    "Dark Architect": { name: "Dark Architect", maxXp: Infinity, income: 8e87, heroxp: 5500 },
 }
 
 const skillBaseData = {
@@ -271,6 +272,7 @@ const skillBaseData = {
     "Transcendent Knight": { name: "Transcendent Knight", maxXp: 100, heroxp: 410, effect: 0.000003, description: "All XP" },
     "Infinity Knight": { name: "Infinity Knight", maxXp: 100, heroxp: 420, effect: 0.000006, description: "Dark Matter Gain" },
     "Singularity Knight": { name: "Singularity Knight", maxXp: 100, heroxp: 430, effect: 0.000012, description: "All XP" },
+    "Continuum Mastery": { name: "Continuum Mastery", maxXp: 100, heroxp: 435, effect: 0.000015, description: "All XP" },
 }
 
 const itemBaseData = {
@@ -522,6 +524,8 @@ const requirementsBaseData = {
     "Transcendent Knight": new TaskRequirement([getQuerySelector("Transcendent Knight")], [{ task: "Omni Knight", requirement: 25 }]),
     "Infinity Knight": new TaskRequirement([getQuerySelector("Infinity Knight")], [{ task: "Transcendent Knight", requirement: 50 }]),
     "Singularity Knight": new TaskRequirement([getQuerySelector("Singularity Knight")], [{ task: "Infinity Knight", requirement: 75 }]),
+    "Dark Architect": new TaskRequirement([getQuerySelector("Dark Architect")], [{ task: "Knight Of Oblivion", requirement: 200000, herequirement: 500000 }]),
+    "Continuum Mastery": new TaskRequirement([getQuerySelector("Continuum Mastery")], [{ task: "Singularity Knight", requirement: 100 }, { task: "Cosmic Recollection", requirement: 1200 }]),
 
     // Properties
     "Homeless": new CoinRequirement([getQuerySelector("Homeless")], [{ requirement: 0 }]),
@@ -650,7 +654,7 @@ const jobCategories = {
     "The Void": ["Corrupted", "Void Slave", "Void Fiend", "Abyss Anomaly", "Void Wraith", "Void Reaver", "Void Lord", "Abyss God"],
     "Galactic Council": ["Eternal Wanderer", "Nova", "Sigma Proioxis", "Acallaris", "One Above All"],
     "Metaverse Guards": ["Snow Crash", "Player One", "Lost in the dark", "Omega"],
-    "Mythical Alignments": ["Knight Of Darkness", "Knight Of Chaos", "Knight Of Calamity", "Knight Of Destruction", "Knight Of Corruption", "Knight Of Oblivion"],
+    "Mythical Alignments": ["Knight Of Darkness", "Knight Of Chaos", "Knight Of Calamity", "Knight Of Destruction", "Knight Of Corruption", "Knight Of Oblivion", "Dark Architect"],
 }
 
 const skillCategories = {
@@ -662,7 +666,7 @@ const skillCategories = {
     "Celestial Powers": ["Cosmic Longevity", "Cosmic Recollection", "Essence Collector", "Galactic Command"],
     "Almightiness": ["Yin Yang", "Parallel Universe", "Higher Dimensions", "Epiphany"],
     "Darkness": ["Dark Prince", "Dark Ruler", "Immortal Ruler", "Dark Magician", "Universal Ruler", "Blinded By Darkness"],
-    "Mythical Powers": ["Mythical Knight", "Eternal Knight", "Celestial Knight", "Omni Knight", "Transcendent Knight", "Infinity Knight", "Singularity Knight"],
+    "Mythical Powers": ["Mythical Knight", "Eternal Knight", "Celestial Knight", "Omni Knight", "Transcendent Knight", "Infinity Knight", "Singularity Knight", "Continuum Mastery"],
 }
 
 const itemCategories = {

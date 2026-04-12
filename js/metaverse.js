@@ -166,12 +166,14 @@ function buyDarkMaterMult() {
 // perks
 
 function getMetaversePerkPointsGain() {
-    let cosmicstringEffect = gameData.itemData["Cosmic String"].getEffect()
+    let cosmicStringEffect = gameData.itemData["Cosmic String"].getEffect()
+    let cosmicStringBonus = cosmicStringEffect > 1 ? 1 + Math.log10(cosmicStringEffect) : 1
+
     if (gameData.essence >= 1e90)
         return (gameData.perks.more_perk_points == 1 ? 10 : 1)
             * (gameData.perks.double_perk_points_gain == 1 ? 2 : 1)
             * (Math.floor(Math.log10(gameData.essence)) - 89)
-            * cosmicstringEffect
+            * cosmicStringBonus
 
     return 0
 }

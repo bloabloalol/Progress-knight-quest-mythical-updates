@@ -335,7 +335,12 @@ function applySpeed(value) {
         return 0
     if (value == Infinity)
         return Infinity
-    return value * getGameSpeed() / updateSpeed
+
+    let speed = getGameSpeed()
+    if (!Number.isFinite(speed))
+        speed = Number.MAX_VALUE
+
+    return value * speed / updateSpeed
 }
 
 function applyUnpausedSpeed(value) {
@@ -343,13 +348,24 @@ function applyUnpausedSpeed(value) {
         return 0
     if (value == Infinity)
         return Infinity
-    return value * getUnpausedGameSpeed() / updateSpeed
+
+    let speed = getUnpausedGameSpeed()
+    if (!Number.isFinite(speed))
+        speed = Number.MAX_VALUE
+
+    return value * speed / updateSpeed
 }
 
 function applySpeedOnBigInt(value) {
     if (value == 0n)
         return 0n
-    return value * BigInt(Math.floor(getGameSpeed())) / BigInt(Math.floor(updateSpeed))
+
+    let speed = getGameSpeed()
+    if (!Number.isFinite(speed))
+        speed = Number.MAX_SAFE_INTEGER
+
+    const divisor = Math.max(1, Math.floor(updateSpeed))
+    return value * BigInt(Math.floor(speed)) / BigInt(divisor)
 }
 
 function getEvilGain() {
@@ -1124,11 +1140,23 @@ function assignMethods() {
             task = Object.assign(new Skill(skillBaseData[task.name]), task)
         }
 
-        // There are two cases. The number is stored as a large number or in the scientific notation.
-        if (typeof task.xpBigInt === "string" && task.xpBigInt.includes("e"))
-            task.xpBigInt = BigInt(exponentialToRawNumberString(task.xpBigInt))
-        else
+        // There are three cases: scientific notation, normal numeric strings, or invalid/infinite serialized values.
+        if (typeof task.xpBigInt === "string") {
+            if (task.xpBigInt === "Infinity") {
+                task.xpBigInt = BigInt(1e305)
+            } else if (task.xpBigInt.includes("e")) {
+                task.xpBigInt = BigInt(exponentialToRawNumberString(task.xpBigInt))
+            } else {
+                task.xpBigInt = BigInt(task.xpBigInt)
+            }
+        } else if (typeof task.xpBigInt === "number") {
+            if (!Number.isFinite(task.xpBigInt))
+                task.xpBigInt = BigInt(1e305)
+            else
+                task.xpBigInt = BigInt(Math.floor(task.xpBigInt))
+        } else {
             task.xpBigInt = BigInt(task.xpBigInt)
+        }
 
         gameData.taskData[key] = task
     }
