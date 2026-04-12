@@ -386,6 +386,24 @@ function getEvilGain() {
         * getDarkMatterSkillEvil() * theDevilInsideYou * stairWayToHell() * evilBooster
 }
 
+function clampNumber(value) {
+    if (!Number.isFinite(value) || Number.isNaN(value))
+        return Number.MAX_VALUE
+    return Math.min(value, Number.MAX_VALUE)
+}
+
+function clampEssence() {
+    gameData.essence = clampNumber(gameData.essence)
+}
+
+function clampDarkOrbs() {
+    gameData.dark_orbs = clampNumber(gameData.dark_orbs)
+}
+
+function clampPerkPoints() {
+    gameData.perks_points = clampNumber(gameData.perks_points)
+}
+
 function getEssenceGain() {
     const essenceControl = gameData.taskData["Yin Yang"]
     const essenceCollector = gameData.taskData["Essence Collector"]
@@ -401,10 +419,12 @@ function getEssenceGain() {
     const IllumininCoreShield = gameData.itemData['Illuminin Core Shield'].getEffect()
     const darkCubeEssence = getDarkCubeEssenceBonus()
 
-    return Cultivating.getEffect() * essenceControl.getEffect() * essenceCollector.getEffect() * transcendentMaster.getEffect()
+    const rawGain = Cultivating.getEffect() * essenceControl.getEffect() * essenceCollector.getEffect() * transcendentMaster.getEffect()
         * faintHope.getEffect() * rise.getEffect() * getChallengeBonus("dance_with_the_devil")
         * getAGiftFromGodEssenceGain() * darkMagician.getEffect() * getDarkMatterSkillEssence() 
-        * theNewGold * lifeIsValueable *  essenceMultGain() * getMonolithEnergyEffect() * darkCubeEssence * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
+        * theNewGold * lifeIsValueable * essenceMultGain() * getMonolithEnergyEffect() * darkCubeEssence * (IllumininCoreShield == 0 ? 1 : IllumininCoreShield)
+
+    return clampNumber(rawGain)
 }
 
 function getDarkMatterGain() {
@@ -799,6 +819,7 @@ function rebirthThree() {
 
     gameData.rebirthThreeCount += 1
     gameData.essence += getEssenceGain()
+    clampEssence()
     gameData.evil = evilTranGain()
 
     resetEvilPerks()
@@ -866,6 +887,7 @@ function rebirthFive() {
 
     gameData.rebirthFiveCount += 1
     gameData.perks_points += getMetaversePerkPointsGain()
+    clampPerkPoints()
     gameData.essence = 0
     gameData.evil = 0
     gameData.evil_perks_points = 0
@@ -1284,6 +1306,8 @@ function loadGameData() {
 
             if (gameData.essence == null)
                 gameData.essence = 0
+            else
+                clampEssence()
 
             if (gameData.days == null)
                 gameData.days = 365 * 14
@@ -1296,6 +1320,8 @@ function loadGameData() {
 
             if (gameData.dark_orbs == null || isNaN(gameData.dark_orbs))
                 gameData.dark_orbs = 0
+            else
+                clampDarkOrbs()
 
             if (gameData.dark_cubes == null || isNaN(gameData.dark_cubes))
                 gameData.dark_cubes = 0
@@ -1311,6 +1337,8 @@ function loadGameData() {
 
             if (gameData.perks_points == null || isNaN(gameData.perks_points))
                 gameData.perks_points = 0
+            else
+                clampPerkPoints()
 
             if (gameData.combat == null)
                 gameData.combat = { enemyForces: 0, lostInCombat: 0, spawnTimer: 0, battlesWon: 0, battleScale: 1 }
@@ -1379,6 +1407,7 @@ function update(needUpdateUI = true) {
 
     gameData.evil_perks_points += applySpeed(getEvilPerksGeneration())
     gameData.dark_orbs += applySpeed(getDarkOrbGeneration())
+    clampDarkOrbs()
     gameData.dark_cubes += applySpeed(getDarkCubeGeneration())
     gameData.monolith_energy += applySpeed(getMonolithEnergyGeneration())
     gameData.hypercubes += applySpeed(getHypercubeGeneration())
@@ -1403,7 +1432,7 @@ function applyPerks() {
 
     if (gameData.perks.instant_essence == 1) {
         if (gameData.essence < getEssenceGain() * 10)
-            gameData.essence = getEssenceGain() * 10
+            gameData.essence = clampNumber(getEssenceGain() * 10)
     }
 
     if (gameData.perks.instant_dark_matter == 1) {

@@ -92,12 +92,18 @@ function buyMythicallity() {
 }
 
 // Rewards
+function clampNumber(value) {
+    if (!Number.isFinite(value) || Number.isNaN(value))
+        return Number.MAX_VALUE
+    return Math.min(value, Number.MAX_VALUE)
+}
+
 function getDarkOrbGeneration() {
     if (gameData.dark_matter_shop.dark_orb_generator == 0) return 0
 
     const darkOrbiter = gameData.requirements["Dark Orbiter"].isCompleted() ? 1e10 : 1
 
-    return Math.pow(100, gameData.dark_matter_shop.dark_orb_generator - 1) * darkOrbiter
+    return clampNumber(Math.pow(100, gameData.dark_matter_shop.dark_orb_generator - 1) * darkOrbiter)
 }
 
 function getTaaAndMagicXpGain() {
