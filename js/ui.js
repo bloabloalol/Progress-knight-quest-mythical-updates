@@ -166,7 +166,17 @@ function renderSideBar() {
     safeSetTextContent("monolithEnergyDisplay", formatTreshold(gameData.monolith_energy))
     safeSetTextContent("darkCubesDisplayPage", formatTreshold(gameData.dark_cubes))
     safeSetTextContent("monolithEnergyDisplayPage", formatTreshold(gameData.monolith_energy))
-    safeSetTextContent("monolithEnergyGainDisplay", format(getMonolithEnergyGeneration()))
+    const monolithGainDisplay = document.getElementById("monolithEnergyGainDisplay")
+    if (monolithGainDisplay) {
+        monolithGainDisplay.textContent = gameData.requirements["The Monolith"].isCompleted() ? "Manual charge" : "0"
+    }
+    const chargeMonolithButton = document.getElementById("chargeMonolithButton")
+    if (chargeMonolithButton) {
+        const cost = getMonolithEnergyChargeCost()
+        const label = cost === 1 ? "Dark Cube" : "Dark Cubes"
+        chargeMonolithButton.textContent = `Charge Monolith (${cost} ${label})`
+        chargeMonolithButton.disabled = !gameData.requirements["The Monolith"].isCompleted() || gameData.dark_cubes < cost
+    }
     safeSetTextContent("monolithEnergyEffectDisplay", format(getMonolithEnergyEffect()))
     safeSetTextContent("darkCubeGainDisplay", format(getDarkCubeGeneration()))
     safeSetTextContent("darkCubeEffectDisplay", format(getDarkCubeEffect()))

@@ -1275,6 +1275,9 @@ function loadGameData() {
             if (gameData.monolith_energy == null || isNaN(gameData.monolith_energy))
                 gameData.monolith_energy = 0
 
+            if (gameData.monolith_energy_charges == null || isNaN(gameData.monolith_energy_charges))
+                gameData.monolith_energy_charges = 0
+
             if (gameData.hypercubes == null || isNaN(gameData.hypercubes))
                 gameData.hypercubes = 0
 

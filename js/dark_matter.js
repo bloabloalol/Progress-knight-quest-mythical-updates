@@ -133,7 +133,25 @@ function getDarkCubeEffect() {
 
 function getMonolithEnergyGeneration() {
     if (!gameData.requirements["The Monolith"].isCompleted()) return 0
-    return 0.01
+    return 0
+}
+
+function getMonolithEnergyChargeCost() {
+    if (!gameData.requirements["The Monolith"].isCompleted()) return Infinity
+    return 1 + Math.floor(gameData.monolith_energy_charges / 4)
+}
+
+function getMonolithEnergyChargeAmount() {
+    return 0.25
+}
+
+function chargeMonolithEnergy() {
+    if (!gameData.requirements["The Monolith"].isCompleted()) return
+    const cost = getMonolithEnergyChargeCost()
+    if (gameData.dark_cubes < cost) return
+    gameData.dark_cubes -= cost
+    gameData.monolith_energy += getMonolithEnergyChargeAmount()
+    gameData.monolith_energy_charges += 1
 }
 
 function getMonolithEnergyEffect() {
@@ -148,7 +166,9 @@ function getDarkCubeGeneration() {
     if (!gameData.requirements["The Monolith"].isCompleted()) return 0
     if (gameData.dark_matter == 0) return 0
 
-    return getDarkMatterGain() / getDarkCubeEffect() * 0.001
+    const darkCubeEffect = getDarkCubeEffect()
+    const baseGain = getDarkMatterGain() / darkCubeEffect
+    return Math.pow(Math.max(baseGain, 1), 0.33) * 0.001 / darkCubeEffect
 }
 
 function getMythicallityDarkMatterGain() {
