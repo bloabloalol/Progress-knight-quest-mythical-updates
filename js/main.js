@@ -400,6 +400,14 @@ function clampDarkOrbs() {
     gameData.dark_orbs = clampNumber(gameData.dark_orbs)
 }
 
+function clampDarkCubes() {
+    gameData.dark_cubes = clampNumber(gameData.dark_cubes)
+}
+
+function clampMonolithEnergy() {
+    gameData.monolith_energy = clampNumber(gameData.monolith_energy)
+}
+
 function clampPerkPoints() {
     gameData.perks_points = clampNumber(gameData.perks_points)
 }
@@ -1325,9 +1333,13 @@ function loadGameData() {
 
             if (gameData.dark_cubes == null || isNaN(gameData.dark_cubes))
                 gameData.dark_cubes = 0
+            else
+                clampDarkCubes()
 
             if (gameData.monolith_energy == null || isNaN(gameData.monolith_energy))
                 gameData.monolith_energy = 0
+            else
+                clampMonolithEnergy()
 
             if (gameData.monolith_energy_charges == null || isNaN(gameData.monolith_energy_charges))
                 gameData.monolith_energy_charges = 0
@@ -1409,7 +1421,9 @@ function update(needUpdateUI = true) {
     gameData.dark_orbs += applySpeed(getDarkOrbGeneration())
     clampDarkOrbs()
     gameData.dark_cubes += applySpeed(getDarkCubeGeneration())
+    clampDarkCubes()
     gameData.monolith_energy += applySpeed(getMonolithEnergyGeneration())
+    clampMonolithEnergy()
     gameData.hypercubes += applySpeed(getHypercubeGeneration())
     if (gameData.hypercubes > getHypercubeCap())
         gameData.hypercubes = getHypercubeCap()

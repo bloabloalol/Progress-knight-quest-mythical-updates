@@ -138,7 +138,7 @@ function getDarkCubeEffect() {
     let effect = 1 + Math.pow(darkCubeLog, 1.5) * 0.05
     if (gameData.requirements["Monolithic Might"].isCompleted())
         effect *= 1.5
-    return effect
+    return clampNumber(effect)
 }
 
 function getMonolithEnergyGeneration() {
@@ -165,14 +165,14 @@ function chargeMonolithEnergy() {
 }
 
 function getMonolithEnergyEffect() {
-    return 1 + 0.02 * gameData.monolith_energy
+    return clampNumber(1 + 0.02 * gameData.monolith_energy)
 }
 
 function getDarkCubeEssenceBonus() {
     if (!gameData.requirements["Eternal Cube"].isCompleted() || gameData.dark_cubes <= 0)
         return 1
 
-    return 1 + Math.log10(Math.max(1, gameData.dark_cubes)) * 0.04
+    return clampNumber(1 + Math.log10(Math.max(1, gameData.dark_cubes)) * 0.04)
 }
 
 function getDarkCubeGeneration() {
@@ -183,7 +183,7 @@ function getDarkCubeGeneration() {
     if (!Number.isFinite(darkMatterGain) || darkMatterGain <= 0) return 0
 
     const baseGain = 0.02 * Math.pow(Math.log10(darkMatterGain + 10), 1.75) * getMonolithEnergyEffect()
-    return softcap(baseGain, 1e7, 0.25)
+    return clampNumber(softcap(baseGain, 1e7, 0.25))
 }
 
 function getMythicallityDarkMatterGain() {

@@ -1,3 +1,9 @@
+function clampNumber(value) {
+    if (!Number.isFinite(value) || Number.isNaN(value))
+        return Number.MAX_VALUE
+    return Math.min(value, Number.MAX_VALUE)
+}
+
 function getEvilPerksGeneration()
 {
 	if (gameData.evil == 0) return 0
@@ -6,7 +12,7 @@ function getEvilPerksGeneration()
 		essence_perk_buff_mult = 10
 	else
 		essence_perk_buff_mult *= gameData.essence
-	return math.log10(gameData.evil + 1) * math.log10(essence_perk_buff_mult) / 365	
+	return clampNumber(math.log10(gameData.evil + 1) * math.log10(essence_perk_buff_mult) / 365)
 }
 
 function getEyeRequirement(){
@@ -33,7 +39,8 @@ function getCelestialRequirement(){
 }
 
 function getEssenceReward(){	
-	return getEssenceRewardPercent() / 100.0 * gameData.essence
+	const reward = getEssenceRewardPercent() / 100.0 * gameData.essence
+	return Number.isFinite(reward) ? Math.min(reward, Number.MAX_VALUE) : Number.MAX_VALUE
 }
 
 function getEssenceRewardPercent(){	
@@ -99,6 +106,8 @@ function buyEvilPerk(evilperknum){
 				gameData.evil_perks_points -= getEvilPerkCost(5)
 				gameData.evil_perks.receive_essence += 1
 				gameData.essence += getEssenceReward()
+				if (!Number.isFinite(gameData.essence) || Number.isNaN(gameData.essence))
+					gameData.essence = Number.MAX_VALUE
 			}
 			break;
 	}
