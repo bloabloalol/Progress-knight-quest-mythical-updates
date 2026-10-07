@@ -397,7 +397,77 @@ function clampEssence() {
 }
 
 function clampDarkOrbs() {
-    gameData.dark_orbs = clampNumber(gameData.dark_orbs)
+    const maximumLog = Math.log10(Number.MAX_VALUE)
+    if (!Number.isFinite(gameData.dark_orbs_log10) || gameData.dark_orbs_log10 <= maximumLog) {
+        gameData.dark_orbs = clampNumber(gameData.dark_orbs)
+        gameData.dark_orbs_log10 = 0
+    } else {
+        gameData.dark_orbs = Number.MAX_VALUE
+    }
+}
+
+function getDarkOrbsLog10() {
+    if (gameData.dark_orbs_log10 > Math.log10(Number.MAX_VALUE))
+        return gameData.dark_orbs_log10
+    if (gameData.dark_orbs <= 0)
+        return -Infinity
+    return Math.log10(gameData.dark_orbs)
+}
+
+function setDarkOrbsLog10(log10) {
+    if (!Number.isFinite(log10) || log10 <= Math.log10(Number.MAX_VALUE)) {
+        gameData.dark_orbs = log10 == -Infinity ? 0 : Math.pow(10, log10)
+        gameData.dark_orbs_log10 = 0
+    } else {
+        gameData.dark_orbs = Number.MAX_VALUE
+        gameData.dark_orbs_log10 = log10
+    }
+}
+
+function formatDarkOrbs(decimals = 1) {
+    return formatLogarithmicNumber(gameData.dark_orbs, getDarkOrbsLog10(), decimals)
+}
+
+function hasDarkOrbsAtLog10(costLog10) {
+    return getDarkOrbsLog10() >= costLog10
+}
+
+function spendDarkOrbsAtLog10(costLog10) {
+    const currentLog10 = getDarkOrbsLog10()
+    if (currentLog10 < costLog10)
+        return false
+    if (currentLog10 == costLog10) {
+        setDarkOrbsLog10(-Infinity)
+        return true
+    }
+
+    const fraction = Math.pow(10, costLog10 - currentLog10)
+    if (fraction < 1e-12)
+        return true
+
+    setDarkOrbsLog10(currentLog10 + Math.log10(1 - fraction))
+    return true
+}
+
+function increaseDarkOrbs() {
+    const generationLog10 = getDarkOrbGenerationLog10()
+    if (!Number.isFinite(generationLog10))
+        return
+
+    const speed = getGameSpeed()
+    if (!Number.isFinite(speed) || speed <= 0)
+        return
+
+    const gainLog10 = generationLog10 + Math.log10(speed / updateSpeed)
+    const currentLog10 = getDarkOrbsLog10()
+    if (!Number.isFinite(currentLog10)) {
+        setDarkOrbsLog10(gainLog10)
+        return
+    }
+
+    const larger = Math.max(currentLog10, gainLog10)
+    const smaller = Math.min(currentLog10, gainLog10)
+    setDarkOrbsLog10(larger + Math.log10(1 + Math.pow(10, smaller - larger)))
 }
 
 function clampDarkCubes() {
@@ -473,6 +543,9 @@ function getGameSpeed() {
 }
 
 function getUnpausedGameSpeed() {
+    if (tempData.debug_time_warping_override != null)
+        return baseGameSpeed * tempData.debug_time_warping_override
+
     const boostWarping = gameData.boost_active ? gameData.metaverse.boost_warp_modifier : 1
     const timeWarping = gameData.taskData["Time Warping"]
     const temporalDimension = gameData.taskData["Temporal Dimension"]
@@ -596,6 +669,8 @@ function debugSetResource(resourceName, inputId) {
     }
 
     gameData[resourceName] = amount
+    if (resourceName == "dark_orbs")
+        gameData.dark_orbs_log10 = 0
     debugSetStatus("Set " + resourceName.replaceAll("_", " ") + " to " + format(amount) + ".")
 }
 
@@ -636,6 +711,22 @@ function debugSetTaskGroup(group, inputId) {
     }
 
     debugSetStatus("Set " + group + " levels to " + format(amount) + ".")
+}
+
+function debugSetOverallTimeWarping(inputId) {
+    const amount = debugGetAmount(inputId)
+    if (amount == null || amount <= 0) {
+        debugSetStatus("Enter a positive finite time-warping value.")
+        return
+    }
+
+    tempData.debug_time_warping_override = amount
+    debugSetStatus("Set overall time warping to x" + format(amount) + ".")
+}
+
+function debugClearTimeWarping() {
+    tempData.debug_time_warping_override = null
+    debugSetStatus("Normal time-warping calculations restored.")
 }
 
 function forceAutobuy() {
@@ -717,13 +808,13 @@ function autoPerks() {
     if (gameData.perks.auto_boost == 1 && !gameData.boost_active && gameData.boost_cooldown <= 0)
         applyBoost()
 
-    if (gameData.perks.auto_dark_orb == 1 && gameData.dark_matter >= getDarkOrbGeneratorCost() * 10 && gameData.dark_orbs != Infinity)
+    if (gameData.perks.auto_dark_orb == 1 && gameData.dark_matter >= getDarkOrbGeneratorCost() * 10)
         buyDarkOrbGenerator()
 
     if (gameData.perks.auto_dark_orb == 1 && gameData.dark_matter >= 100 && gameData.dark_matter_shop.a_miracle == false)
         buyAMiracle()
 
-    if (gameData.perks.auto_dark_shop == 1 && gameData.dark_orbs >= 1000) {
+    if (gameData.perks.auto_dark_shop == 1 && hasDarkOrbsAtLog10(3)) {
         buyADealWithTheChairman()
         buyAGiftFromGod()
         buyGottaBeFast()
@@ -996,6 +1087,7 @@ function rebirthFive() {
     gameData.evil_perks.receive_essence = 0
     gameData.dark_matter = 0
     gameData.dark_orbs = 0
+    gameData.dark_orbs_log10 = 0
     gameData.dark_matter_shop.dark_orb_generator = 0
     gameData.dark_matter_shop.a_miracle = false
 
@@ -1414,8 +1506,9 @@ function loadGameData() {
 
             if (gameData.dark_orbs == null || isNaN(gameData.dark_orbs))
                 gameData.dark_orbs = 0
-            else
-                clampDarkOrbs()
+            if (gameData.dark_orbs_log10 == null || !Number.isFinite(gameData.dark_orbs_log10))
+                gameData.dark_orbs_log10 = 0
+            clampDarkOrbs()
 
             if (gameData.dark_cubes == null || isNaN(gameData.dark_cubes))
                 gameData.dark_cubes = 0
@@ -1504,8 +1597,7 @@ function update(needUpdateUI = true) {
     increaseCoins()
 
     gameData.evil_perks_points += applySpeed(getEvilPerksGeneration())
-    gameData.dark_orbs += applySpeed(getDarkOrbGeneration())
-    clampDarkOrbs()
+    increaseDarkOrbs()
     gameData.dark_cubes += applySpeed(getDarkCubeGeneration())
     clampDarkCubes()
     gameData.monolith_energy += applySpeed(getMonolithEnergyGeneration())

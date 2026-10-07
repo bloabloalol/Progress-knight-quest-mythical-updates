@@ -33,6 +33,23 @@ function format(number, decimals = 1) {
     }
 }
 
+function formatLogarithmicNumber(number, log10, decimals = 1) {
+    if (!Number.isFinite(log10) || log10 <= Math.log10(Number.MAX_VALUE))
+        return format(number, decimals)
+
+    const units = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "D", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv", "Tv", "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"]
+    const tier = Math.floor(log10 / 3)
+    const scaled = Math.pow(10, log10 - tier * 3)
+
+    if ((gameData.settings.numberNotation == 0 || tier < 3) && tier < units.length)
+        return math.floor(scaled, decimals).toFixed(decimals) + units[tier]
+
+    if (gameData.settings.numberNotation == 1)
+        return math.floor(Math.pow(10, log10 - Math.floor(log10)), decimals).toFixed(decimals) + "e" + Math.floor(log10)
+
+    return math.floor(scaled, decimals).toFixed(decimals) + "e" + tier * 3
+}
+
 function getCoinsData() {
     switch (gameData.settings.currencyNotation) {
         case 0: return [

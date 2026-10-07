@@ -147,7 +147,7 @@ function renderSideBar() {
     safeSetTextContent("darkMatterGainDisplay", format(getDarkMatterGain()))
     safeSetTextContent("darkMatterGainButtonDisplay", "+" + format(getDarkMatterGain()))
 
-    safeSetTextContent("darkOrbsDisplay", formatTreshold(gameData.dark_orbs))
+    safeSetTextContent("darkOrbsDisplay", formatDarkOrbs())
     const darkCubesInfo = document.getElementById("darkCubesInfo")
     if (darkCubesInfo) {
         darkCubesInfo.hidden = !gameData.requirements["The Monolith"].isCompleted()
@@ -740,28 +740,28 @@ function renderDarkMatter() {
     const darkMatterSkillsDisplay = document.getElementById("darkMatterSkillsDisplay")
     if (darkMatterSkillsDisplay)
         darkMatterSkillsDisplay.textContent = gameData.settings.layout == 0 ? "" : format(gameData.dark_matter)
-    safeSetTextContent("darkOrbsShopDisplay", formatTreshold(gameData.dark_orbs))
+    safeSetTextContent("darkOrbsShopDisplay", formatDarkOrbs())
 
     // Dark Matter Shop
     safeSetTextContent("darkOrbGeneratorCost", format(getDarkOrbGeneratorCost()))
     const darkOrbGenerator = document.getElementById("darkOrbGenerator")
     if (darkOrbGenerator)
-        darkOrbGenerator.textContent = format(getDarkOrbGeneration())
+        darkOrbGenerator.textContent = formatLogarithmicNumber(getDarkOrbGeneration(), getDarkOrbGenerationLog10())
 
-    safeSetTextContent("aDealWithTheChairmanCost", format(getADealWithTheChairmanCost()))
+    safeSetTextContent("aDealWithTheChairmanCost", formatLogarithmicNumber(getADealWithTheChairmanCost(), getADealWithTheChairmanCostLog10()))
     safeSetTextContent("aDealWithTheChairmanEffect", format(getTaaAndMagicXpGain()))
 
     safeSetTextContent("aGiftFromGodEffect", format(getAGiftFromGodEssenceGain()))
-    safeSetTextContent("aGiftFromGodCost", format(getAGiftFromGodCost()))
+    safeSetTextContent("aGiftFromGodCost", formatLogarithmicNumber(getAGiftFromGodCost(), getAGiftFromGodCostLog10()))
 
     safeSetTextContent("lifeCoachEffect", format(getLifeCoachIncomeGain()))
-    safeSetTextContent("lifeCoachCost", format(getLifeCoachCost()))
+    safeSetTextContent("lifeCoachCost", formatLogarithmicNumber(getLifeCoachCost(), getLifeCoachCostLog10()))
 
     safeSetTextContent("gottaBeFastEffect", format(getGottaBeFastGain(), 2))
-    safeSetTextContent("gottaBeFastCost", format(getGottaBeFastCost()))
+    safeSetTextContent("gottaBeFastCost", formatLogarithmicNumber(getGottaBeFastCost(), getGottaBeFastCostLog10()))
 
     safeSetTextContent("MythicallityEffect", format(getMythicallityDarkMatterGain()))
-    safeSetTextContent("MythicallityCost", format(getMythicallityCost()))
+    safeSetTextContent("MythicallityCost", formatLogarithmicNumber(getMythicallityCost(), getMythicallityCostLog10()))
 
     const aMiracleBuyButton = document.getElementById("aMiracleBuyButton")
     if (aMiracleBuyButton) {

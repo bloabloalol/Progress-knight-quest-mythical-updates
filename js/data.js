@@ -18,6 +18,7 @@
     essence: 0,
     dark_matter: 0,
     dark_orbs: 0,
+    dark_orbs_log10: 0,
     dark_cubes: 0,
     monolith_energy: 0,
     monolith_energy_charges: 0,

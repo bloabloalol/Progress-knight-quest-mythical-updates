@@ -1041,8 +1041,9 @@
 					<button class="w3-button button" onclick="debugSetTaskGroup('skill', 'debugSkillLevel')">Set</button>
 					<label>Max levels <input id="debugMaxLevel" type="text" inputmode="decimal" value="100"></label>
 					<button class="w3-button button" onclick="debugSetTaskGroup('max', 'debugMaxLevel')">Set</button>
-					<label>Time Warping level <input id="debugTimeWarpingLevel" type="text" inputmode="decimal" value="100"></label>
-					<button class="w3-button button" onclick="debugSetTaskGroup('timeWarping', 'debugTimeWarpingLevel')">Set</button>
+					<label>Overall time warping <input id="debugTimeWarpingLevel" type="text" inputmode="decimal" value="100"></label>
+					<button class="w3-button button" onclick="debugSetOverallTimeWarping('debugTimeWarpingLevel')">Set</button>
+					<button class="w3-button button" onclick="debugClearTimeWarping()">Normal</button>
 				</div>
 			</div>
 			<div id="debugStatus" class="debug-status" role="status"></div>

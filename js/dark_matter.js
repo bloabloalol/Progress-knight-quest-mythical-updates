@@ -1,10 +1,10 @@
 // Costs Dark Matter
 function getDarkOrbGeneratorCost() {
-    return 1 + 3 * gameData.dark_matter_shop.dark_orb_generator
+    return clampNumber(1 + 3 * gameData.dark_matter_shop.dark_orb_generator)
 }
 
 function canBuyDarkOrbGenerator() {
-    return gameData.dark_matter >= getDarkOrbGeneratorCost() && getDarkOrbGeneration() != Infinity
+    return gameData.dark_matter >= getDarkOrbGeneratorCost()
 }
 
 
@@ -17,76 +17,91 @@ function buyDarkOrbGenerator() {
 
 // Costs Dark Orbs
 function getADealWithTheChairmanCost() {
-    return Math.pow(1e3, gameData.dark_matter_shop.a_deal_with_the_chairman + 1)
+    return clampNumber(Math.pow(1e3, gameData.dark_matter_shop.a_deal_with_the_chairman + 1))
+}
+
+function getADealWithTheChairmanCostLog10() {
+    return 3 * (gameData.dark_matter_shop.a_deal_with_the_chairman + 1)
 }
 
 function canBuyADealWithTheChairman() {
-    return gameData.dark_orbs >= getADealWithTheChairmanCost() && getADealWithTheChairmanCost() != Infinity
+    return hasDarkOrbsAtLog10(getADealWithTheChairmanCostLog10())
 }
 
 function buyADealWithTheChairman() {
-    if (canBuyADealWithTheChairman()) {
-        gameData.dark_orbs -= getADealWithTheChairmanCost()
+    if (canBuyADealWithTheChairman() && spendDarkOrbsAtLog10(getADealWithTheChairmanCostLog10())) {
         gameData.dark_matter_shop.a_deal_with_the_chairman += 1
     }
 }
 
 function getAGiftFromGodCost() {
-    return Math.pow(1e5, gameData.dark_matter_shop.a_gift_from_god + 1)
+    return clampNumber(Math.pow(1e5, gameData.dark_matter_shop.a_gift_from_god + 1))
+}
+
+function getAGiftFromGodCostLog10() {
+    return 5 * (gameData.dark_matter_shop.a_gift_from_god + 1)
 }
 
 function canBuyAGiftFromGod() {
-    return gameData.dark_orbs >= getAGiftFromGodCost() && getAGiftFromGodCost() != Infinity
+    return hasDarkOrbsAtLog10(getAGiftFromGodCostLog10())
 }
 
 function buyAGiftFromGod() {
-    if (canBuyAGiftFromGod()) {
-        gameData.dark_orbs -= getAGiftFromGodCost()
+    if (canBuyAGiftFromGod() && spendDarkOrbsAtLog10(getAGiftFromGodCostLog10())) {
         gameData.dark_matter_shop.a_gift_from_god += 1
     }
 }
 
 function getLifeCoachCost() {
-    return Math.pow(1e10, gameData.dark_matter_shop.life_coach + 1)
+    return clampNumber(Math.pow(1e10, gameData.dark_matter_shop.life_coach + 1))
+}
+
+function getLifeCoachCostLog10() {
+    return 10 * (gameData.dark_matter_shop.life_coach + 1)
 }
 
 function canBuyLifeCoach() {
-    return gameData.dark_orbs >= getLifeCoachCost() && getLifeCoachCost() != Infinity 
+    return hasDarkOrbsAtLog10(getLifeCoachCostLog10())
 }
 
 function buyLifeCoach() {
-    if (canBuyLifeCoach()) {
-        gameData.dark_orbs -= getLifeCoachCost()
+    if (canBuyLifeCoach() && spendDarkOrbsAtLog10(getLifeCoachCostLog10())) {
         gameData.dark_matter_shop.life_coach += 1
     }
 }
 
 function getGottaBeFastCost() {
-    return Math.pow(5e7, gameData.dark_matter_shop.gotta_be_fast + 1)
+    return clampNumber(Math.pow(5e7, gameData.dark_matter_shop.gotta_be_fast + 1))
+}
+
+function getGottaBeFastCostLog10() {
+    return Math.log10(5e7) * (gameData.dark_matter_shop.gotta_be_fast + 1)
 }
 
 function canBuyGottaBeFast() {
-    return gameData.dark_orbs >= getGottaBeFastCost() && getGottaBeFastCost() != Infinity
+    return hasDarkOrbsAtLog10(getGottaBeFastCostLog10())
 }
 
 function buyGottaBeFast() {
-    if (canBuyGottaBeFast()) {
-        gameData.dark_orbs -= getGottaBeFastCost()
+    if (canBuyGottaBeFast() && spendDarkOrbsAtLog10(getGottaBeFastCostLog10())) {
         gameData.dark_matter_shop.gotta_be_fast += 1
     }
 }
 
 function getMythicallityCost() {
-    return Math.pow(5e7, gameData.dark_matter_shop.mythicallity + 1)
+    return clampNumber(Math.pow(5e7, gameData.dark_matter_shop.mythicallity + 1))
+}
+
+function getMythicallityCostLog10() {
+    return Math.log10(5e7) * (gameData.dark_matter_shop.mythicallity + 1)
 }
 
 function canBuyMythicallity() {
-    return gameData.dark_orbs >= getMythicallityCost() && getMythicallityCost() != Infinity
+    return hasDarkOrbsAtLog10(getMythicallityCostLog10())
 }
 
 function buyMythicallity() {
-    if (canBuyMythicallity()) {
-        gameData.dark_orbs -= getMythicallityCost()
+    if (canBuyMythicallity() && spendDarkOrbsAtLog10(getMythicallityCostLog10())) {
         gameData.dark_matter_shop.mythicallity += 1
     }
 }
@@ -104,6 +119,13 @@ function getDarkOrbGeneration() {
     const darkOrbiter = gameData.requirements["Dark Orbiter"].isCompleted() ? 1e10 : 1
 
     return clampNumber(Math.pow(100, gameData.dark_matter_shop.dark_orb_generator - 1) * darkOrbiter)
+}
+
+function getDarkOrbGenerationLog10() {
+    if (gameData.dark_matter_shop.dark_orb_generator == 0) return -Infinity
+
+    const darkOrbiterLog10 = gameData.requirements["Dark Orbiter"].isCompleted() ? 10 : 0
+    return 2 * (gameData.dark_matter_shop.dark_orb_generator - 1) + darkOrbiterLog10
 }
 
 function getTaaAndMagicXpGain() {

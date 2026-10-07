@@ -387,7 +387,7 @@ class DarkOrbsRequirement extends Requirement {
     }
 
     getCondition(isHero, requirement) {
-        return gameData.dark_orbs >= requirement.requirement
+        return hasDarkOrbsAtLog10(Math.log10(requirement.requirement))
     }
 }
 
