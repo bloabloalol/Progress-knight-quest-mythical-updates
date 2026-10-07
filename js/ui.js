@@ -1617,4 +1617,4 @@ window.addEventListener('keydown', function (e) {
             case "6": toggleChallenge("the_darkest_time"); break
         }
     }
-});
+}, true);
