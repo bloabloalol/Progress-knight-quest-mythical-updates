@@ -348,6 +348,7 @@ function renderSkills() {
         if (!(task instanceof Skill)) continue
 
         const row = getRowByName(task.name)
+        if (!row) continue
 
         task.querySelector(".level", row).textContent = formatLevel(task.level)
         task.querySelector(".xpGain", row).textContent = task.getXpGainFormatted()
