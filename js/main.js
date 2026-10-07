@@ -276,6 +276,9 @@ function getDarknessXpGain() {
 }
 
 function getHappiness() {
+    if (tempData.debug_happiness_override != null)
+        return tempData.debug_happiness_override
+
     if (gameData.active_challenge == "legends_never_die" || gameData.active_challenge == "the_darkest_time") return 1
 
     const meditationEffect = getBindedTaskEffect("Meditation")
@@ -727,6 +730,22 @@ function debugSetOverallTimeWarping(inputId) {
 function debugClearTimeWarping() {
     tempData.debug_time_warping_override = null
     debugSetStatus("Normal time-warping calculations restored.")
+}
+
+function debugSetHappiness(inputId) {
+    const amount = debugGetAmount(inputId)
+    if (amount == null || amount < 0) {
+        debugSetStatus("Enter a non-negative finite happiness value.")
+        return
+    }
+
+    tempData.debug_happiness_override = amount
+    debugSetStatus("Set happiness to x" + format(amount) + ".")
+}
+
+function debugClearHappiness() {
+    tempData.debug_happiness_override = null
+    debugSetStatus("Normal happiness calculations restored.")
 }
 
 function forceAutobuy() {
