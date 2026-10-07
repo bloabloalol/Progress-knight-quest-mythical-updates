@@ -1598,6 +1598,7 @@ function loadGameData() {
 }
 
 function update(needUpdateUI = true) {
+    clampEssence()
     makeHeroes()
     increaseRealtime()
     increaseDays()
@@ -1626,6 +1627,7 @@ function update(needUpdateUI = true) {
         gameData.hypercubes = getHypercubeCap()
 
     applyMilestones()
+    clampEssence()
     applyEvilPerks()
     applyPerks()
     updateStats()
