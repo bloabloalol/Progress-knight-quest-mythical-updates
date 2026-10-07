@@ -58,6 +58,7 @@ function updateUI() {
 
     if (currentTab == Tab.SHOP || gameData.settings.layout == 0 && currentTab == Tab.JOBS) {
         updateRequiredRows(gameData.itemData, itemCategories)
+        updateItemRowVisibility()
         renderShop()
     }
 
@@ -931,6 +932,11 @@ function isTaskVisible(taskName) {
     return requirement ? requirement.isCompleted() : true
 }
 
+function isItemVisible(itemName) {
+    const requirement = gameData.requirements[itemName]
+    return requirement ? requirement.isCompleted() : true
+}
+
 function isCategoryVisible(categoryName, categories) {
     if (categories == jobCategories || categories == skillCategories) {
         const category = categories[categoryName]
@@ -947,6 +953,16 @@ function updateTaskRowVisibility(categoryType) {
             if (row) {
                 row.classList.toggle("hidden", !isTaskVisible(taskName))
             }
+        }
+    }
+}
+
+function updateItemRowVisibility() {
+    for (const categoryName in itemCategories) {
+        for (const itemName of itemCategories[categoryName]) {
+            const row = getRowByName(itemName)
+            if (row)
+                row.classList.toggle("hidden", !isItemVisible(itemName))
         }
     }
 }
@@ -990,7 +1006,8 @@ function createRow(templates, name, categoryName, categoryType) {
     row.id = "row" + removeSpaces(removeStrangeCharacters(name))
     row.classList.add(removeSpaces(categoryName))
 
-    if ((categoryType == jobCategories || categoryType == skillCategories) && !isTaskVisible(name)) {
+    if ((categoryType == jobCategories || categoryType == skillCategories) && !isTaskVisible(name)
+        || categoryType == itemCategories && !isItemVisible(name)) {
         row.classList.add("hidden")
     }
 
@@ -1547,6 +1564,15 @@ function toggleChallenge(challengeName) {
 
 window.addEventListener('keydown', function (e) {
     if (!e.ctrlKey && !e.shiftKey && !e.altKey) {
+        if (e.key == "~" && !e.repeat) {
+            e.preventDefault()
+            toggleDebugMenu()
+            return
+        }
+        if (e.key == "Escape" && !document.getElementById("debugMenu").hidden) {
+            toggleDebugMenu()
+            return
+        }
         if (e.key == " " && !e.repeat) {
             togglePause()
             if (e.target == document.body) {

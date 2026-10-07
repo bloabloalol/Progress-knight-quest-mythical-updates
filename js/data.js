@@ -156,12 +156,12 @@ const metaverseUnlocks = ["Reduce Boost Cooldown", "Increase Boost Duration", "I
     "Essence gain multiplier", "Challenges are not reset", "Dark Matter gain multiplier"]
 
 const jobBaseData = {
-    "Beggar": { name: "Beggar", maxXp: 50, income: 5, heroxp: 36 },
-    "Farmer": { name: "Farmer", maxXp: 100, income: 9, heroxp: 37 },
-    "Fisherman": { name: "Fisherman", maxXp: 200, income: 15, heroxp: 38 },
-    "Miner": { name: "Miner", maxXp: 400, income: 40, heroxp: 39 },
-    "Blacksmith": { name: "Blacksmith", maxXp: 800, income: 80, heroxp: 40 },
-    "Merchant": { name: "Merchant", maxXp: 1600, income: 150, heroxp: 41 },
+    "Beggar": { name: "Beggar", maxXp: 50, income: 6, heroxp: 36 },
+    "Farmer": { name: "Farmer", maxXp: 100, income: 10, heroxp: 37 },
+    "Fisherman": { name: "Fisherman", maxXp: 200, income: 17, heroxp: 38 },
+    "Miner": { name: "Miner", maxXp: 400, income: 44, heroxp: 39 },
+    "Blacksmith": { name: "Blacksmith", maxXp: 800, income: 88, heroxp: 40 },
+    "Merchant": { name: "Merchant", maxXp: 1600, income: 165, heroxp: 41 },
 
     "Squire": { name: "Squire", maxXp: 42, income: 5, heroxp: 51 },
     "Footman": { name: "Footman", maxXp: 1000, income: 50, heroxp: 52 },

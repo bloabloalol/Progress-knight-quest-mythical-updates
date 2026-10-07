@@ -542,6 +542,85 @@ function togglePause() {
     gameData.paused = !gameData.paused
 }
 
+let debugPausedBeforeOpen = false
+
+function toggleDebugMenu() {
+    const menu = document.getElementById("debugMenu")
+    if (!menu) return
+
+    if (menu.hidden) {
+        debugPausedBeforeOpen = gameData.paused
+        gameData.paused = true
+        menu.hidden = false
+        document.getElementById("debugStatus").textContent = "Simulation paused while the debug menu is open."
+    } else {
+        menu.hidden = true
+        gameData.paused = debugPausedBeforeOpen
+    }
+}
+
+function debugSetStatus(message) {
+    document.getElementById("debugStatus").textContent = message
+    updateUI()
+}
+
+function debugGetAmount(inputId, integer = false) {
+    const amount = Number(document.getElementById(inputId).value)
+    if (!Number.isFinite(amount) || amount < 0)
+        return null
+    return integer ? Math.floor(amount) : amount
+}
+
+function debugSetResource(resourceName, inputId) {
+    const amount = debugGetAmount(inputId)
+    if (amount == null) {
+        debugSetStatus("Enter a non-negative finite amount.")
+        return
+    }
+
+    gameData[resourceName] = amount
+    debugSetStatus("Set " + resourceName.replaceAll("_", " ") + " to " + format(amount) + ".")
+}
+
+function debugUnlockAll() {
+    for (const requirementName in gameData.requirements)
+        gameData.requirements[requirementName].completed = true
+
+    debugSetStatus("All requirements unlocked.")
+}
+
+function debugSetTaskGroup(group, inputId) {
+    const amount = debugGetAmount(inputId, true)
+    if (amount == null) {
+        debugSetStatus("Enter a non-negative finite level.")
+        return
+    }
+
+    for (const taskName in gameData.taskData) {
+        const task = gameData.taskData[taskName]
+        const isTask = task instanceof Job || task instanceof Skill
+
+        if (group == "hero" && isTask) {
+            task.isHero = true
+            task.level = amount
+            task.maxLevel = amount
+            task.unlocked = true
+        } else if (group == "skill" && task instanceof Skill) {
+            task.level = amount
+            task.maxLevel = Math.max(task.maxLevel, amount)
+            task.unlocked = true
+        } else if (group == "max" && isTask) {
+            task.maxLevel = amount
+        } else if (group == "timeWarping" && taskName == "Time Warping") {
+            task.level = amount
+            task.maxLevel = Math.max(task.maxLevel, amount)
+            task.unlocked = true
+        }
+    }
+
+    debugSetStatus("Set " + group + " levels to " + format(amount) + ".")
+}
+
 function forceAutobuy() {
     autoBuyEnabled = true
 }
@@ -863,8 +942,6 @@ function rebirthFour() {
     gameData.evil_perks_points = 0
     gameData.evil_perks.receive_essence = 0
 
-    resetEvilPerks()
-
     if (gameData.metaverse.challenge_altar == 0 && gameData.perks.save_challenges == 0)  {
         for (const challenge in gameData.challenges) {
             gameData.challenges[challenge] = 0
@@ -945,14 +1022,6 @@ function rebirthFive() {
     gameData.boost_cooldown = 0
 
     gameData.hypercubes = 0
-    gameData.metaverse.boost_cooldown_modifier = 1
-    gameData.metaverse.boost_timer_modifier = 1
-    gameData.metaverse.boost_warp_modifier = 100
-    gameData.metaverse.hypercube_gain_modifier = 1
-    gameData.metaverse.evil_tran_gain = 0
-    gameData.metaverse.essence_gain_modifier = 0
-    gameData.metaverse.challenge_altar = 0
-    gameData.metaverse.dark_mater_gain_modifer = 0    
 
     rebirthReset()
 

@@ -296,6 +296,46 @@
 								<div id="evilperksPage1" class="panel page-column w3-padding">
 									<div>
 										<div class="color-evil">Evil perks</div>
+								<div id="debugMenu" class="debug-overlay" hidden>
+									<div class="debug-menu" role="dialog" aria-modal="true" aria-labelledby="debugMenuTitle">
+										<div class="debug-menu-header">
+											<div id="debugMenuTitle" class="text-caption"><b>Debug menu</b></div>
+											<button class="w3-button button" onclick="toggleDebugMenu()">Close</button>
+										</div>
+										<div class="debug-menu-section">
+											<div class="text-caption">Set resources</div>
+											<div class="debug-resource-grid">
+												<label>Coins <input id="debugCoinsAmount" type="number" min="0" value="1000000"></label>
+												<button class="w3-button button" onclick="debugSetResource('coins', 'debugCoinsAmount')">Set</button>
+												<label>Evil <input id="debugEvilAmount" type="number" min="0" value="1000000"></label>
+												<button class="w3-button button" onclick="debugSetResource('evil', 'debugEvilAmount')">Set</button>
+												<label>Essence <input id="debugEssenceAmount" type="number" min="0" value="1000000"></label>
+												<button class="w3-button button" onclick="debugSetResource('essence', 'debugEssenceAmount')">Set</button>
+												<label>Dark Matter <input id="debugDarkMatterAmount" type="number" min="0" value="1000"></label>
+												<button class="w3-button button" onclick="debugSetResource('dark_matter', 'debugDarkMatterAmount')">Set</button>
+												<label>Dark Orbs <input id="debugDarkOrbsAmount" type="number" min="0" value="1000"></label>
+												<button class="w3-button button" onclick="debugSetResource('dark_orbs', 'debugDarkOrbsAmount')">Set</button>
+												<label>Hypercubes <input id="debugHypercubesAmount" type="number" min="0" value="1000"></label>
+												<button class="w3-button button" onclick="debugSetResource('hypercubes', 'debugHypercubesAmount')">Set</button>
+											</div>
+										</div>
+										<div class="debug-menu-section">
+											<div class="text-caption">Progression</div>
+											<button class="w3-button button" onclick="debugUnlockAll()">Unlock all requirements</button>
+											<div class="debug-resource-grid">
+												<label>Hero levels <input id="debugHeroLevel" type="number" min="0" value="100"></label>
+												<button class="w3-button button" onclick="debugSetTaskGroup('hero', 'debugHeroLevel')">Set</button>
+												<label>Skill levels <input id="debugSkillLevel" type="number" min="0" value="100"></label>
+												<button class="w3-button button" onclick="debugSetTaskGroup('skill', 'debugSkillLevel')">Set</button>
+												<label>Max levels <input id="debugMaxLevel" type="number" min="0" value="100"></label>
+												<button class="w3-button button" onclick="debugSetTaskGroup('max', 'debugMaxLevel')">Set</button>
+												<label>Time Warping level <input id="debugTimeWarpingLevel" type="number" min="0" value="100"></label>
+												<button class="w3-button button" onclick="debugSetTaskGroup('timeWarping', 'debugTimeWarpingLevel')">Set</button>
+											</div>
+										</div>
+										<div id="debugStatus" class="debug-status" role="status"></div>
+									</div>
+								</div>
 										<div>Evil perk points gain based on your <span id="eppInfo"></span>.</div>
 										<div>Evil perks and Evil perk points are reset on Embrace Evil.</div>
 										<div>Next evil perk age requirement is capped by previous.</div>
