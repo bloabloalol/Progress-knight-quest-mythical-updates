@@ -554,9 +554,16 @@ function toggleDebugMenu() {
         menu.hidden = false
         document.getElementById("debugStatus").textContent = "Simulation paused while the debug menu is open."
     } else {
-        menu.hidden = true
-        gameData.paused = debugPausedBeforeOpen
+        closeDebugMenu()
     }
+}
+
+function closeDebugMenu() {
+    const menu = document.getElementById("debugMenu")
+    if (!menu) return
+
+    menu.hidden = true
+    gameData.paused = debugPausedBeforeOpen
 }
 
 function debugSetStatus(message) {

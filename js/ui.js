@@ -4,7 +4,7 @@ function initializeUI() {
     */
 
     createAllRows(jobCategories, "jobTable")
-    createAllRows(skillCategories, "skillTable")
+            closeDebugMenu()
     createAllRows(itemCategories, "itemTable")
     createAllRows(milestoneCategories, "milestoneTable")
 
