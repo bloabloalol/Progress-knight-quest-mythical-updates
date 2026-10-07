@@ -1563,8 +1563,8 @@ function toggleChallenge(challengeName) {
 }
 
 window.addEventListener('keydown', function (e) {
-    if (!e.ctrlKey && !e.altKey && !e.repeat
-        && (e.code == "Backquote" || e.key == "~" || e.key == "`")) {
+    if (!e.ctrlKey && !e.shiftKey && !e.altKey && !e.repeat
+        && (e.code == "KeyD" || e.key.toLowerCase() == "d")) {
         e.preventDefault()
         toggleDebugMenu()
         return
