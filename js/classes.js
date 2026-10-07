@@ -1,3 +1,9 @@
+function safeBigIntFromNumber(value) {
+    if (!Number.isFinite(value) || Number.isNaN(value))
+        return BigInt(1e305)
+    return BigInt(Math.floor(value))
+}
+
 class Task {
     constructor(baseData) {
         this.baseData = baseData
@@ -40,12 +46,12 @@ class Task {
     }
 
     getMaxBigIntXp() {
-        const maxXp = this.getMaxXp() == Infinity ? BigInt(1e305) : BigInt(Math.floor(this.getMaxXp()));
+        const maxXp = safeBigIntFromNumber(this.getMaxXp())
 
         if (maxXp < 1e305)
             return maxXp
 
-        return maxXp * 2n ** (BigInt(this.level) / 120n) * (2n ** (BigInt(this.baseData.heroxp) / 9n))
+        return maxXp * 2n ** (safeBigIntFromNumber(this.level) / 120n) * (2n ** (safeBigIntFromNumber(this.baseData.heroxp) / 9n))
     }
 
     getXpLeft() {
@@ -71,13 +77,13 @@ class Task {
         let baseGain = this.isHero ? getHeroXpGainMultipliers(this) : 1
         if (!Number.isFinite(baseGain) || Number.isNaN(baseGain))
             baseGain = Number.MAX_VALUE
-        let xpGain = BigInt(Math.floor(baseGain))
+        let xpGain = safeBigIntFromNumber(baseGain)
 
         this.xpMultipliers.forEach(multiplier => {
             let value = multiplier()
             if (!Number.isFinite(value) || Number.isNaN(value))
                 value = Number.MAX_VALUE
-            xpGain *= BigInt(Math.ceil(value))
+            xpGain *= safeBigIntFromNumber(value)
         })
 
         return xpGain
