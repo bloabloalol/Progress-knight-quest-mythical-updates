@@ -572,7 +572,17 @@ function debugSetStatus(message) {
 }
 
 function debugGetAmount(inputId, integer = false) {
-    const amount = Number(document.getElementById(inputId).value)
+    const units = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "D", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv", "Tv", "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"]
+    const input = document.getElementById(inputId).value.trim().replaceAll(",", "")
+    const match = input.match(/^([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)([a-z]*)$/i)
+    if (!match)
+        return null
+
+    const unit = units.findIndex(value => value.toLowerCase() == match[2].toLowerCase())
+    if (unit < 0)
+        return null
+
+    const amount = Number(match[1]) * Math.pow(10, unit * 3)
     if (!Number.isFinite(amount) || amount < 0)
         return null
     return integer ? Math.floor(amount) : amount

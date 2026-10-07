@@ -1017,17 +1017,17 @@
 			<div class="debug-menu-section">
 				<div class="text-caption">Set resources</div>
 				<div class="debug-resource-grid">
-					<label>Coins <input id="debugCoinsAmount" type="number" min="0" value="1000000"></label>
+					<label>Coins <input id="debugCoinsAmount" type="text" inputmode="decimal" value="1000000"></label>
 					<button class="w3-button button" onclick="debugSetResource('coins', 'debugCoinsAmount')">Set</button>
-					<label>Evil <input id="debugEvilAmount" type="number" min="0" value="1000000"></label>
+					<label>Evil <input id="debugEvilAmount" type="text" inputmode="decimal" value="1000000"></label>
 					<button class="w3-button button" onclick="debugSetResource('evil', 'debugEvilAmount')">Set</button>
-					<label>Essence <input id="debugEssenceAmount" type="number" min="0" value="1000000"></label>
+					<label>Essence <input id="debugEssenceAmount" type="text" inputmode="decimal" value="1000000"></label>
 					<button class="w3-button button" onclick="debugSetResource('essence', 'debugEssenceAmount')">Set</button>
-					<label>Dark Matter <input id="debugDarkMatterAmount" type="number" min="0" value="1000"></label>
+					<label>Dark Matter <input id="debugDarkMatterAmount" type="text" inputmode="decimal" value="1000"></label>
 					<button class="w3-button button" onclick="debugSetResource('dark_matter', 'debugDarkMatterAmount')">Set</button>
-					<label>Dark Orbs <input id="debugDarkOrbsAmount" type="number" min="0" value="1000"></label>
+					<label>Dark Orbs <input id="debugDarkOrbsAmount" type="text" inputmode="decimal" value="1000"></label>
 					<button class="w3-button button" onclick="debugSetResource('dark_orbs', 'debugDarkOrbsAmount')">Set</button>
-					<label>Hypercubes <input id="debugHypercubesAmount" type="number" min="0" value="1000"></label>
+					<label>Hypercubes <input id="debugHypercubesAmount" type="text" inputmode="decimal" value="1000"></label>
 					<button class="w3-button button" onclick="debugSetResource('hypercubes', 'debugHypercubesAmount')">Set</button>
 				</div>
 			</div>
@@ -1035,13 +1035,13 @@
 				<div class="text-caption">Progression</div>
 				<button class="w3-button button" onclick="debugUnlockAll()">Unlock all requirements</button>
 				<div class="debug-resource-grid">
-					<label>Hero levels <input id="debugHeroLevel" type="number" min="0" value="100"></label>
+					<label>Hero levels <input id="debugHeroLevel" type="text" inputmode="decimal" value="100"></label>
 					<button class="w3-button button" onclick="debugSetTaskGroup('hero', 'debugHeroLevel')">Set</button>
-					<label>Skill levels <input id="debugSkillLevel" type="number" min="0" value="100"></label>
+					<label>Skill levels <input id="debugSkillLevel" type="text" inputmode="decimal" value="100"></label>
 					<button class="w3-button button" onclick="debugSetTaskGroup('skill', 'debugSkillLevel')">Set</button>
-					<label>Max levels <input id="debugMaxLevel" type="number" min="0" value="100"></label>
+					<label>Max levels <input id="debugMaxLevel" type="text" inputmode="decimal" value="100"></label>
 					<button class="w3-button button" onclick="debugSetTaskGroup('max', 'debugMaxLevel')">Set</button>
-					<label>Time Warping level <input id="debugTimeWarpingLevel" type="number" min="0" value="100"></label>
+					<label>Time Warping level <input id="debugTimeWarpingLevel" type="text" inputmode="decimal" value="100"></label>
 					<button class="w3-button button" onclick="debugSetTaskGroup('timeWarping', 'debugTimeWarpingLevel')">Set</button>
 				</div>
 			</div>
