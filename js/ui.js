@@ -1563,12 +1563,14 @@ function toggleChallenge(challengeName) {
 }
 
 window.addEventListener('keydown', function (e) {
+    if (!e.ctrlKey && !e.altKey && !e.repeat
+        && (e.code == "Backquote" || e.key == "~" || e.key == "`")) {
+        e.preventDefault()
+        toggleDebugMenu()
+        return
+    }
+
     if (!e.ctrlKey && !e.shiftKey && !e.altKey) {
-        if (e.key == "~" && !e.repeat) {
-            e.preventDefault()
-            toggleDebugMenu()
-            return
-        }
         if (e.key == "Escape" && !document.getElementById("debugMenu").hidden) {
             toggleDebugMenu()
             return
